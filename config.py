@@ -1,0 +1,37 @@
+# config.py
+# Jake Malley
+# 15/01/2015
+
+"""
+Defines a default configuration class DefaultConfig
+and a production and development config: 
+ProductionConfig and DevelopmentConfig respectively.
+"""
+
+class DefaultConfig(object):
+    """
+    Default configuration settings all other
+    configuration class should inherit from this class.
+    """
+
+    # Disables debugging by default.
+    DEBUG = False
+
+class DevelopmentConfig(DefaultConfig):
+    """
+    Configuration to be used in development environments only!
+    """
+
+    # Warn the user so they know they're using the development config when running the server.
+    print("Warning using development configuration.")
+
+    # Enables debugging in development environments
+    DEBUG = True
+
+class ProductionConfig(DefaultConfig):
+    """
+    Configuration to be used in production environments.
+    """
+
+    # Explicitly make sure debugging is disabled.
+    DEBUG = False
