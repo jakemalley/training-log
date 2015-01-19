@@ -1,3 +1,5 @@
+<!-- Template page to display error messages, takes a dictionary with:
+'title', 'description' and 'error_code'. Used for displaying HTML errors. -->
 {% extends 'layout.html' %}
 {% block title %}{% if error_dictionary %}{{ error_dictionary['title'] }}{% else %}An error occurred.{% endif%}{% endblock %}
 {% block content %}
