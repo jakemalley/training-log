@@ -12,5 +12,12 @@ from wtforms.validators import DataRequired, Email
 
 class LoginForm(Form):
 
+    """
+    Form for users to login to the site.
+    """
+
+    # Text field for the users email.
     email = TextField('email',validators=[DataRequired(),Email(message=None)])
-    password = TextField('password',validators=[DataRequired()])
+    
+    # Password field for the users password.
+    password = PasswordField('password',validators=[DataRequired()])
