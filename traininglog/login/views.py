@@ -32,6 +32,7 @@ def login():
     if request.method == 'POST':
         if user_login_form.validate_on_submit():
             # Do the user Login.
+            pass
         else:
             render_template('login.html', user_login_form=user_login_form, error=error)
 
