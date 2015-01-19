@@ -13,3 +13,9 @@ app = Flask(__name__)
 
 # Import the error handlers.
 import traininglog.error
+
+# Import the blueprints.
+from traininglog.login.views import login_blueprint
+
+# Register the blueprints.
+app.register_blueprint(login_blueprint)

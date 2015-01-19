@@ -14,7 +14,37 @@
             <!-- Content from child templates goes here. -->
             {% block content %}{% endblock %}
 
-        </div>
+            {% if (error) or (get_flashed_messages()) %}
+            <!-- If there are any messages we need to display. -->
+
+            <!-- Display a fixed navbar at the bottom of the page -->
+            <nav class="navbar navbar-default navbar-fixed-bottom" style="padding: 0 10px 0 10px;">
+                
+                <!-- Display the error to the user. -->
+                {% if error %}
+                    <br/>
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        {{ error }}
+                    </div>
+                {% endif %}
+            
+                <!-- Display any flashed (generic messages) to the user. -->
+                {% for message in get_flashed_messages() %}
+                <br/>
+                <div class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    {{ message }}
+                </div>
+                {% endfor %}
+
+            {% endif %}
+
+            </nav>
+
+        </div><!-- .container -->
 
     </body>
 </html>
