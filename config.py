@@ -18,6 +18,10 @@ class DefaultConfig(object):
     DEBUG = False
     # Specify a secret key. (Will be different in production.)
     SECRET_KEY = '\t\x0b\xcf\xa3Fpj\x18\x04\x83\xb5\x0b\xe7\xa2\x0c\x12\x04B\x0c\x87\xfeLkS'
+    # Automatically approve users when they sign up.
+    AUTO_APROVE = True
+    # Automatically make users administrators when they sign up.
+    AUTO_ADMIN = False
 
 class DevelopmentConfig(DefaultConfig):
     """
