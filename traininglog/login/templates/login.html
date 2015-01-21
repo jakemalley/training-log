@@ -4,12 +4,14 @@
 {% block content %}
 <div class="row">
   <div class="col-md-4 col-md-offset-4" style="text-align:center;padding-top:20px;">
-    <h1>Please Login</h1>
+    <h1>Please Login.</h1>
     <p>A login is required to access the site.</p>
     <form class="form-signin" role="form" method="post" action="">
       {{ user_login_form.csrf_token }}
       <p>
+        <div class="input">
         {{ user_login_form.email(placeholder="email") }}
+        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></div>
         {% for error in user_login_form.email.errors %}
           <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -19,7 +21,9 @@
         {% endfor %}
       </p>
       <p>
+        <div class="input">
         {{ user_login_form.password(placeholder="password") }}
+        <span class="glyphicon glyphicon-link" aria-hidden="true"></span></div>
         {% for error in user_login_form.password.errors %}
           <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -28,7 +32,7 @@
           </div>
         {% endfor %}
       </p>
-      <button class="btn btn-sm btn-info" type="submit">Sign in</button>
+      <button class="btn btn-sm btn-blue" type="submit">Sign in</button>
     </form>
   </div><!-- .col-md-4 col-md-offset-4 -->
 </div><!-- .row -->

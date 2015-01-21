@@ -2,3 +2,20 @@
 
 /* Import style from bootstrap styles */
 @import url('bootstrap.min.css');
+
+/* Custom buttons which extend the bootstrap buttons design. */
+.btn-blue{
+    background-color: #3fa9f5;
+    color: #ffffff;
+}
+
+.btn-blue:hover{
+    background-color: #67BBF7;
+    opacity: 0.4;
+    color: #ffffff;
+}
+
+/* Set glyphicons to change colour on mouse over in all forms. */
+form .input:hover > .glyphicon{
+    color: #3fa9f5;
+}
