@@ -78,7 +78,7 @@ class SignUpForm(Form):
     # Text field for the users postcode.
     postcode = TextField(
         'postcode',
-        validators=[DataRequired(),Length(min=5,max=8)]
+        validators=[DataRequired(),Length(min=5,max=9)]
     )
 
 
