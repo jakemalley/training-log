@@ -16,6 +16,8 @@ import traininglog.error
 
 # Import the blueprints.
 from traininglog.login.views import login_blueprint
+from traininglog.home.views import home_blueprint
 
 # Register the blueprints.
 app.register_blueprint(login_blueprint)
+app.register_blueprint(home_blueprint)
