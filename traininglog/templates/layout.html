@@ -25,7 +25,7 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
                     {% if user_login_form %}
                     <!-- If we have the login form display it -->
-                    <form class="navbar-form navbar-right" role="form" method="post" action="">
+                    <form class="navbar-form navbar-right" role="form" method="post" action="{{ url_for('login.login') }}">
                         <div class="form-group">
                             {{ user_login_form.email(class="form-control",placeholder="email") }}
                             {{ user_login_form.password(class="form-control",placeholder="password") }}
@@ -48,25 +48,27 @@
             {% block content %}{% endblock %}
 
             <nav class="navbar navbar-default navbar-fixed-bottom">
-            <p class="navbar-text">Signed in as ...</p>
+                <div class="container">
+                <p class="navbar-text">&copy; Copyright Parkwood Vale Harriers 2015</p>
+                <p class="navbar-text navbar-right"></p>
 
-                <!-- Display the error to the user. -->
-                {% if error %}
+                    <!-- Display the error to the user. -->
+                    {% if error %}
+                            <p class="navbar-text pull-right">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                {{ error }}</div>
+                            </p>
+                        </div>
+                    {% endif %}
+                
+                    <!-- Display any flashed (generic messages) to the user. -->
+                    {% for message in get_flashed_messages() %}
                         <p class="navbar-text pull-right">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            {{ error }}</div>
+                            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                            {{ message }}
                         </p>
-                    </div>
-                {% endif %}
-            
-                <!-- Display any flashed (generic messages) to the user. -->
-                {% for message in get_flashed_messages() %}
-                    <p class="navbar-text pull-right">
-                        <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                        {{ message }}
-                    </p>
-                {% endfor %}
-
+                    {% endfor %}
+                </div>
             </nav>
         </div><!-- .container -->
 

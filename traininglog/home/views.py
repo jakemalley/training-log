@@ -6,8 +6,9 @@
 Define the routes for the home blueprint.
 """
 
-from flask import flash, redirect, render_template, request, \
-                    url_for, Blueprint
+from flask import flash, redirect, render_template, \
+                request, url_for, Blueprint
+from traininglog.login.forms import LoginForm
 
 # Setup the home blueprint.
 home_blueprint = Blueprint(
@@ -31,4 +32,4 @@ def welcome():
     Renders the welcome.html template and displays it the user.
     """
 
-    return render_template('welcome.html')
+    return render_template('welcome.html',user_login_form=LoginForm())
