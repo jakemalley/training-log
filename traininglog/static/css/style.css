@@ -3,6 +3,11 @@
 /* Import style from bootstrap styles */
 @import url('bootstrap.min.css');
 
+/* General body styling */
+body { 
+    padding-top: 70px; 
+}
+
 /* Custom buttons which extend the bootstrap buttons design. */
 .btn-blue{
     background-color: #3fa9f5;
@@ -15,7 +20,39 @@
     color: #ffffff;
 }
 
-/* Set glyphicons to change colour on mouse over in all forms. */
-form .input:hover > .glyphicon{
-    color: #3fa9f5;
+/* Classes for all forms */
+.input-top{
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-middle{
+    margin-bottom: -1px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-bottom{
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Form Down */
+.form-down{
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+.form-down .form-control{
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
 }
