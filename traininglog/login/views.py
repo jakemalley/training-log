@@ -1,4 +1,4 @@
-# views.py
+# login/views.py
 # Jake Malley
 # 19/01/15
 
@@ -16,7 +16,7 @@ login_blueprint = Blueprint(
     template_folder='templates'
     )
 
-# Define the routes
+# Define the routes.
 @login_blueprint.route('/login', methods=['GET','POST'])
 def login():
     """
