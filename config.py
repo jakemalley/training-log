@@ -41,3 +41,7 @@ class ProductionConfig(DefaultConfig):
 
     # Explicitly make sure debugging is disabled.
     DEBUG = False
+    
+    # Set the host and port.
+    HOST = '0.0.0.0'
+    PORT = 8080

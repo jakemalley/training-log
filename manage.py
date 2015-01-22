@@ -9,7 +9,7 @@ inside the application context.
 """
 
 # Imports
-from flask.ext.script import Manager
+from flask.ext.script import Manager,Server
 from traininglog import app
 from os import environ
 
@@ -24,8 +24,29 @@ else:
     # If we could get the config from the environment variable print it out.
     print(environ['TRAINING_LOG_CONFIG'])
 
-
 manager = Manager(app)
+
+# Get options from the config.
+try:
+    # Get host from the config.
+    host = app.config['HOST']
+except KeyError:
+    # If the option isn't present use the default.
+    host = '127.0.0.1'
+
+try:
+    # Get the port from the config.
+    port = app.config['PORT']
+except KeyError:
+    # If the option isn't present use the default.
+    port=5000
+
+# Create the server to run the application.
+server = Server(host=host, port=port)
+
+# Add commands to the manager.
+# Add the default runserver command for the application server.
+manager.add_command('runserver', server)
 
 if __name__ == "__main__":
 
