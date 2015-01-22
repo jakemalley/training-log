@@ -13,11 +13,8 @@
         {{ user_login_form.email(placeholder="email") }}
         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></div>
         {% for error in user_login_form.email.errors %}
-          <div class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            {{ error }}
-          </div>
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
         {% endfor %}
       </p>
       <p>
@@ -25,11 +22,8 @@
         {{ user_login_form.password(placeholder="password") }}
         <span class="glyphicon glyphicon-link" aria-hidden="true"></span></div>
         {% for error in user_login_form.password.errors %}
-          <div class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            {{ error }}
-          </div>
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
         {% endfor %}
       </p>
       <button class="btn btn-sm btn-blue" type="submit">Sign in</button>
