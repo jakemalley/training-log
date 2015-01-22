@@ -8,7 +8,7 @@ Define the routes for the login blueprint.
 
 from flask import flash, redirect, render_template, request, \
                     url_for, Blueprint
-from forms import LoginForm
+from forms import LoginForm, SignUpForm
 
 # Setup the login blueprint.
 login_blueprint = Blueprint(
@@ -23,7 +23,7 @@ def login():
     Renders the login.html template and displays it the user.
     """
 
-    # Create an empty error.
+    # Create an empty error variable.
     error = None
 
     # Create the login form.
@@ -37,3 +37,24 @@ def login():
             render_template('login.html', user_login_form=user_login_form, error=error)
 
     return render_template('login.html',user_login_form=user_login_form, error=error)
+
+@login_blueprint.route('/signup', methods=['GET','POST'])
+def signup():
+    """
+    Renders the signup.html template and displays it to the user.
+    """
+
+    # Create an empty error variable.
+    error = None
+
+    # Create the sign up form.
+    user_signup_form = SignUpForm()
+
+    if request.method == 'POST':
+        if user_signup_form.validate_on_submit():
+            # Do the user Login.
+            pass
+        else:
+            render_template('signup.html', user_signup_form=user_signup_form, error=error)
+
+    return render_template('signup.html',user_signup_form=user_signup_form, error=error)

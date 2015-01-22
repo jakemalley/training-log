@@ -1,0 +1,95 @@
+<!-- Display login form to the users. -->
+{% extends 'layout.html' %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4" style="text-align:center;padding-top:20px;">
+    <h1>Please Sign Up.</h1>
+    <p>An account is required to access this site.<br/>Please sign up below.</p>
+    <form class="form-signin" role="form" method="post" action="">
+
+      <p>
+        {{ user_signup_form.firstname(placeholder="Firstname") }}
+        {% for error in user_signup_form.firstname.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.surname(placeholder="Surname") }}
+        {% for error in user_signup_form.surname.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.email(placeholder="Email") }}
+        {% for error in user_signup_form.email.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.password(placeholder="Password") }}
+        {% for error in user_signup_form.password.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.password_confirm(placeholder="Password Confirmation") }}
+        {% for error in user_signup_form.password_confirm.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.gender(placeholder="Gender") }}
+        {% for error in user_signup_form.gender.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.height(placeholder="Height") }}
+        {% for error in user_signup_form.height.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.address_line_1(placeholder="Address Line 1") }}
+        {% for error in user_signup_form.address_line_1.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.city(placeholder="City") }}
+        {% for error in user_signup_form.city.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ user_signup_form.postcode(placeholder="Postcode") }}
+        {% for error in user_signup_form.postcode.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <button class="btn btn-sm btn-blue" type="submit">Sign Up</button>
+    </form>
+  </div><!-- .col-md-4 col-md-offset-4 -->
+</div><!-- .row -->
+{% endblock %}
