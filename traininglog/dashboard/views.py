@@ -8,7 +8,7 @@ Define the routes for the dashboard blueprint.
 
 from flask import flash, redirect, render_template, \
                 request, url_for, Blueprint
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user
 
 # Setup the dashboard blueprint.
 dashboard_blueprint = Blueprint(

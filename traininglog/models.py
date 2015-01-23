@@ -70,5 +70,8 @@ class Member(db.Model):
     def set_last_login_date(self,last_login_date):
         self.last_login_date=last_login_date
 
+    def get_full_name(self):
+        return self.firstname.title() + " " + self.surname.title()
+
     def __repr__(self):
         return '<Name {}'.format(self.firstname+self.surname)
