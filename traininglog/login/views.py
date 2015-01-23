@@ -11,6 +11,7 @@ from flask import flash, redirect, render_template, request, \
 from forms import LoginForm, SignUpForm
 from traininglog import bcrypt, app, db
 from traininglog.models import Member
+from flask.ext.login import login_user, logout_user, login_required
 from datetime import datetime
 
 # Setup the login blueprint.
@@ -39,9 +40,11 @@ def login():
             member = Member.query.filter_by(email=user_login_form.email.data).first()
             if member is not None and bcrypt.check_password_hash(member.password,user_login_form.password.data):
                 # The user is valid.
+                # Log the In.
+                login_user(member,remember=True)
                 flash('Logged In')
-                # Redirect them to the welcome page.(will change in future.)
-                return redirect(url_for('home.welcome'))
+                # Redirect them to the dashboard page.
+                return redirect(url_for('dashboard.dashboard'))
             else:
                 error='Invalid Credentials, Please try again.'
         else:
@@ -102,3 +105,13 @@ def signup():
             render_template('signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
 
     return render_template('signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
+
+@login_blueprint.route('/logout')
+@login_required
+def logout():
+    """
+    Logs the current user out of the application.
+    """
+    logout_user()
+    flash('You were logged out!')
+    return redirect(url_for('home.welcome'))
