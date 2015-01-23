@@ -20,4 +20,24 @@ dashboard_blueprint = Blueprint(
 @dashboard_blueprint.route('/')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+
+    chart_data = [{
+                    'value': 25,
+                    'color':"#F7464A",
+                    'highlight': "#FF5A5E",
+                    'label': "Running"
+                },
+                {
+                    'value': 25,
+                    'color': "#46BFBD",
+                    'highlight': "#5AD3D1",
+                    'label': "Swimming"
+                },
+                {
+                    'value': 50,
+                    'color': "#FDB45C",
+                    'highlight': "#FFC870",
+                    'label': "Cycling"
+                }]
+
+    return render_template('dashboard.html',chart_data=chart_data)

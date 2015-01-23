@@ -5,6 +5,17 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2" style="text-align:center;padding-top:20px;">
     <h1>Dashboard</h1>
+    <div id="canvas-holder">
+            <canvas id="chart-area" width="300" height="300"/>
+        </div>
+    <script>
+        var pieData = {{chart_data|safe}}
+
+            window.onload = function(){
+                var ctx = document.getElementById("chart-area").getContext("2d");
+                window.myPie = new Chart(ctx).Pie(pieData);
+            };
+    </script>
   </div><!-- .col-md-4 col-md-offset-4 -->
 </div><!-- .row -->
 {% endblock %}
