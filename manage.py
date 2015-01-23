@@ -26,6 +26,13 @@ else:
 
 manager = Manager(app)
 
+@manager.command
+def init_db():
+    from traininglog import db
+    from traininglog.models import Member
+    db.create_all()
+    db.session.commit()
+
 # Get options from the config.
 try:
     # Get host from the config.
