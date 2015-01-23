@@ -8,6 +8,14 @@
     <p>A login is required to access the site.</p>
     <form class="form-down" role="form" method="post" action="">
       {{ user_login_form.csrf_token }}
+
+        <!-- If there is an error display it to the user. -->
+        {% if error %}
+          <p class="alert alert-danger">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              {{ error }}
+          </p>
+        {% endif %}
         
         {{ user_login_form.email(class="form-control input-top",placeholder="email") }}
         {% for error in user_login_form.email.errors %}

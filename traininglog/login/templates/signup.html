@@ -8,6 +8,13 @@
     <p>An account is required to access this site.<br/>Please sign up below.</p>
     <form class="form-down" role="form" method="post" action="">
       {{ user_signup_form.csrf_token }}
+      <!-- If there is an error display it to the user. -->
+      {% if error %}
+        <p class="alert alert-danger">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            {{ error }}
+        </p>
+      {% endif %}
       <p>
         {{ user_signup_form.firstname(class="form-control",placeholder="Firstname") }}
         {% for error in user_signup_form.firstname.errors %}
