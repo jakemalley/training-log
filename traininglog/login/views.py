@@ -41,7 +41,7 @@ def login():
             if member is not None and bcrypt.check_password_hash(member.password,user_login_form.password.data):
                 # The user is valid.
                 # Log the In.
-                login_user(member,remember=True)
+                login_user(member,remember=bool(user_login_form.remember.data))
                 flash('Logged In')
                 # Redirect them to the dashboard page.
                 return redirect(url_for('dashboard.dashboard'))

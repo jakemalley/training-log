@@ -8,7 +8,7 @@ Defines all the forms used in the login blueprint.
 
 # Imports
 from flask_wtf import Form
-from wtforms import TextField, TextAreaField, PasswordField, SelectField, DecimalField
+from wtforms import TextField, TextAreaField, PasswordField, SelectField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, NumberRange
 
 class LoginForm(Form):
@@ -22,6 +22,9 @@ class LoginForm(Form):
     
     # Password field for the users password.
     password = PasswordField('password',validators=[DataRequired(),Length(min=6,max=32)])
+
+    # Remember Me field.
+    remember = BooleanField('remember me')
 
 class SignUpForm(Form):
 
