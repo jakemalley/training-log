@@ -24,7 +24,7 @@ class DefaultConfig(object):
     # SQLite Database.
     SQLALCHEMY_DATABASE_URI = "sqlite:///"+os.path.abspath("training_log_database.db")
     # Automatically approve users when they sign up.
-    AUTO_APROVE = True
+    AUTO_APPROVE = True
     # Automatically make users administrators when they sign up.
     AUTO_ADMIN = False
 
