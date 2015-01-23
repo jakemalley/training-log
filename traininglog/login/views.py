@@ -34,6 +34,7 @@ def login():
     user_login_form = LoginForm()
 
     if request.method == 'POST':
+        # If the form was submitted. (i.e. data posted to the page.)
         if user_login_form.validate_on_submit():
             # Do the user Login.
             # Query the database for a user that matches the email.
@@ -41,16 +42,28 @@ def login():
             if member is not None and bcrypt.check_password_hash(member.password,user_login_form.password.data):
                 # The user is valid.
                 # Log the In.
-                login_user(member,remember=bool(user_login_form.remember.data))
-                flash('Logged In')
-                # Redirect them to the dashboard page.
-                return redirect(url_for('dashboard.dashboard'))
+                if login_user(member,remember=bool(user_login_form.remember.data)):
+                    # All is okay log the user in.
+                    flash('Logged In')
+                    # Update the last login date.
+                    member.set_last_login_date(datetime.utcnow())
+                    # Commit changes to the database.
+                    db.session.commit()
+                    # Redirect them to the dashboard page.
+                    return redirect(url_for('dashboard.dashboard'))
+                else:
+                    # The user cannot be logged in.
+                    if not member.is_active():
+                        # The account is not activated as account_is_active returns False
+                        error = "Account is not active, please contact your system administrator."
+                    else:
+                        # Unknown error.
+                        error = "Unknown error occurred, please contact your system administrator."
             else:
-                error='Invalid Credentials, Please try again.'
-        else:
-            render_template('login.html', user_login_form=user_login_form, error=error)
-
-
+                # Either the user does not exist or the password doesn't match.
+                # Error message left vague for security.
+                error="Invalid Credentials, Please try again."
+    # Display the login.html page to the user.
     return render_template('login.html',user_login_form=user_login_form, error=error)
 
 @login_blueprint.route('/signup', methods=['GET','POST'])
