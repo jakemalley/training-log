@@ -13,6 +13,34 @@ from traininglog import bcrypt
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
+class Exercise(db.Model):
+    """
+    Entity for all the exercise data.
+    """
+
+    # The table name.
+    __tablename__ = "Exercise"
+    # Table fields.
+    id = db.Column(db.Integer,primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
+    exercise_type = db.Column(db.Enum('running', 'cycling', 'swimming', name='exercise_type'))
+    exercise_level = db.Column(db.Integer, nullable=False)
+    exercise_duration = db.Column(db.Float, nullable=False)
+    calories_burned = db.Column(db.Float, nullable=False)
+    member_id = db.Column(db.Integer, ForeignKey('Member.id'))
+
+    def __init__(self, date, exercise_type, exercise_level, exercise_duration, calories_burned, member_id):
+
+        self.date=date
+        self.exercise_type=exercise_type
+        self.exercise_level=exercise_level
+        self.exercise_duration=exercise_duration
+        self.calories_burned=calories_burned
+        self.member_id=member_id
+
+    def get_member():
+        return self.member.get_full_name()
+
 class Member(db.Model):
 
     """
@@ -21,20 +49,22 @@ class Member(db.Model):
     # The table name.
     __tablename__ = "Member"
     # Table fields.
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String, nullable=False)
     surname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     gender = db.Column(db.Enum('male', 'female', name='gender'))
-    height = db.Column(db.Float,nullable=False)
+    height = db.Column(db.Float, nullable=False)
     address_line_1 = db.Column(db.String, nullable=False)
     city = db.Column(db.String, nullable=False)
     postcode = db.Column(db.String, nullable=False)
-    join_date = db.Column(db.DateTime,nullable=False)
-    last_login_date = db.Column(db.DateTime,nullable=False)
+    join_date = db.Column(db.DateTime, nullable=False)
+    last_login_date = db.Column(db.DateTime, nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False)
     account_is_active = db.Column(db.Boolean, nullable=False)
+    # Relationship for exercise.
+    exercise_data = relationship("Exercise", backref="member")
 
     def __init__(self, firstname, surname, email, password, gender, height, address_line_1, city, postcode, join_date, last_login_date, is_admin=0, account_is_active=1):
         

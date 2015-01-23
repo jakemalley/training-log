@@ -10,7 +10,9 @@ inside the application context.
 
 # Imports
 from flask.ext.script import Manager,Server
+from flask.ext.migrate import Migrate, MigrateCommand
 from traininglog import app
+from traininglog import db
 from os import environ
 
 # Get the configuration class to use from a environment variable.
@@ -28,10 +30,12 @@ manager = Manager(app)
 
 @manager.command
 def init_db():
-    from traininglog import db
     from traininglog.models import Member
     db.create_all()
     db.session.commit()
+
+migrate = Migrate(app, db)
+manager.add_command('db', MigrateCommand)
 
 # Get options from the config.
 try:
