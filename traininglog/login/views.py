@@ -97,21 +97,32 @@ def signup():
                     is_admin = 0
 
                 try:
-                    if app.config['AUTO_APROVE']:
+                    if app.config['AUTO_APPROVE']:
                         is_active = 1
                     else:
                         is_active = 0
                 except KeyError:
                     is_active = 0
 
+                member = Member(user_signup_form.firstname.data, user_signup_form.surname.data, user_signup_form.email.data, user_signup_form.password.data, user_signup_form.gender.data, user_signup_form.height.data, user_signup_form.address_line_1.data,user_signup_form.city.data, user_signup_form.postcode.data,now,now,is_admin, is_active)
 
-                db.session.add(Member(user_signup_form.firstname.data, user_signup_form.surname.data, user_signup_form.email.data, user_signup_form.password.data, user_signup_form.gender.data, user_signup_form.height.data, user_signup_form.address_line_1.data,user_signup_form.city.data, user_signup_form.postcode.data,now,now,is_admin, is_active))
-
+                db.session.add(member)
                 db.session.commit()
 
-                # Redirect them to the welcome page.(will change in future.)
-                return redirect(url_for('home.welcome'))
-
+                # Redirect them to the dashboard. (Also log them in.)
+                if login_user(member):
+                    # All is okay log the user in.
+                    flash('Logged In')
+                    # Redirect them to the dashboard page.
+                    return redirect(url_for('dashboard.dashboard'))
+                else:
+                    # For some reason the user could not be logged in.
+                    if not member.is_active():
+                        # The account is not activated as account_is_active returns False (AUTO_APPROVE set to False)
+                        error = "Before you can login the system requires an administrator approves your account."
+                    else:
+                        # Redirect them to the login page. The error will be dealt with there.
+                        return redirect(url_for('login.login'))
             else:
                 error = "An account is already associated with this email address."
         else:
