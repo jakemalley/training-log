@@ -5,7 +5,9 @@
 
 /* General body styling */
 body { 
+    /* Padding for the NavBars */
     padding-top: 70px; 
+    padding-bottom: 70px; 
 }
 
 /* Custom buttons which extend the bootstrap buttons design. */
