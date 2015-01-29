@@ -10,6 +10,19 @@ body {
     padding-bottom: 70px; 
 }
 
+.background-with-image{
+    background-image:url(http://crossfitpella.com/wp-content/uploads/2014/12/TrailRun.jpg);
+    background-size: 100%;
+}
+
+/* Custom text boxes with drop shadow. */
+.text-box{
+    -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    7px 7px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         7px 7px 5px 0px rgba(50, 50, 50, 0.75);
+    background-color:#fff;
+    padding:20px;
+}
 /* Custom buttons which extend the bootstrap buttons design. */
 .btn-blue{
     background-color: #3fa9f5;
