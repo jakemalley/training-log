@@ -11,8 +11,11 @@ body {
 }
 
 .background-with-image{
-    background-image:url(http://crossfitpella.com/wp-content/uploads/2014/12/TrailRun.jpg);
-    background-size: 100%;
+    background: url(../images/background.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 /* Custom text boxes with drop shadow. */
