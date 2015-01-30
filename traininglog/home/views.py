@@ -7,7 +7,7 @@ Define the routes for the home blueprint.
 """
 
 from flask import flash, redirect, render_template, \
-                request, url_for, Blueprint
+                request, url_for, Blueprint,abort
 from traininglog.login.forms import LoginForm
 from flask.ext.login import current_user
 

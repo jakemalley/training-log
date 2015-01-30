@@ -21,7 +21,7 @@ def error_page_not_found(error):
     """
 
     # Create a dictionary with the error and error message.
-    error_dictionary = dict(title="Unauthorised.", description="You need to login to view that page.", error_code=error)
+    error_dictionary = dict(title="Unauthorised.", description="You need to login to view this page.", error_code=error)
     # Display the error page passing the error_dictionary.
     return render_template("error.html",error_dictionary=error_dictionary)
 

@@ -3,17 +3,21 @@
 {% extends 'layout.html' %}
 {% block title %}{% if error_dictionary %}{{ error_dictionary['title'] }}{% else %}An error occurred.{% endif%}{% endblock %}
 {% block content %}
-
-    {% if error_dictionary %}
-        <!-- If the error dictionary is present, display it. -->
-            <h1>{{ error_dictionary['title'] }}</h1>
-            <p>{{ error_dictionary['description'] }}</p>
-            <br/>
-            <p>{{ error_dictionary['error_code'] }}. Please contact your system administrator.</p>
-        {% else %}
-        <!-- Otherwise display an unknown error -->
-            <h1>An unknown error occurred.</h1>
-            <p>Please contact your system administrator</p>
-    {% endif %}
-
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2" style="text-align:center;padding-top:20px;">
+            <div class="text-box">
+                {% if error_dictionary %}
+                <!-- If the error dictionary is present, display it. -->
+                    <h1>{{ error_dictionary['title'] }}</h1>
+                    <p>{{ error_dictionary['description'] }}</p>
+                    <br/>
+                    <p>{{ error_dictionary['error_code'] }}. Please contact your system administrator.</p>
+                {% else %}
+                <!-- Otherwise display an unknown error -->
+                    <h1>An unknown error occurred.</h1>
+                    <p>Please contact your system administrator</p>
+                {% endif %}
+            </div><!-- .text-box -->
+        </div><!-- .col-md-8 col-md-offset-2 -->
+    </div><!-- .row -->
 {% endblock %}
