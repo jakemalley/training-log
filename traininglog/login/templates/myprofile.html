@@ -3,60 +3,133 @@
 {% block title %}{{ current_user.get_full_name()}}{% endblock %}
 {% block content %}
 <div class="row">
-    <div class="col-md-8 col-md-offset-2" style="text-align:center;padding-top:20px;">
-        <div class="page-header">
-            <h1>{{current_user.get_firstname()}}'s Profile</h1>
+    <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
+        <div class="text-box">
+            <div class="page-header">
+                <h1>{{current_user.get_firstname()}}'s Profile<br/>
+                <small>Personal Details</small></h1>
+            </div>
+            <table class="table table-hover" style="text-align:left;">
+                <tr>
+                    <th>Firstname</th>
+                    <th>Surname</th>
+                </tr>
+                <tr>
+                    <td>{{current_user.get_firstname()}}</td>
+                    <td>{{current_user.get_surname()}}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <th>Gender</th>
+                </tr>
+                <tr>
+                    <td>{{current_user.get_email()}}</td>
+                    <td>{{current_user.get_gender()}}</td>
+                </tr>
+                <tr>
+                    <th>Height</th>
+                    <th>Current Weight</th>
+                </tr>
+                <tr>
+                    <td>{{current_user.get_height()}} Meters</td>
+                    <td>Coming Soon.</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>{{current_user.get_address()}}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Join Date</th>
+                    <th>Last Login Date</th>
+                </tr>
+                <tr>
+                    <td>{{current_user.get_join_date()}}</td>
+                    <td>{{current_user.get_last_login_date()}}</td>
+                </tr>
+                <tr>
+                    <th>Administrator</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td>{% if current_user.is_administrator() %}Yes{% else %}No{% endif %}</td>
+                    <td></td>
+                </tr>
+            </table>
+
+            <!-- If there is an error display it to the user. -->
+            {% if error %}
+                <p class="alert alert-danger">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    {{ error }}
+                </p>
+            {% endif %}
+
+            <!-- Errors from the editDetailsForm in the Modal. -->
+            {% for field, errors in user_edit_details_form.errors.items() %}
+                <p><span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                The {{ field }} field had the following error: {{ errors[0] }}</p>
+            {% endfor %}
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editDetailsModal">
+              Edit Personal Details
+            </button>
+
+            <!-- editDetailsModal -->
+            <div class="modal fade" id="editDetailsModal" tabindex="-1" role="dialog" aria-labelledby="Edit Personal Details" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Edit Personal Details</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editDetailsForm" class="form-down" role="form" method="post" action="">
+                                {{ user_edit_details_form.csrf_token }}
+                                <p>
+                                Please amend your personal details and click 'save changes' when done.
+                                </p>
+                                <p>
+                                    {{ user_edit_details_form.firstname(class="form-control",value=current_user.get_firstname()) }}
+                                </p>
+                                <p>
+                                    {{ user_edit_details_form.surname(class="form-control",value=current_user.get_surname()) }}
+                                </p>
+                                <p>
+                                    {{ user_edit_details_form.email(class="form-control",value=current_user.get_email()) }}
+                                </p>
+                                <p>
+                                    {{ user_edit_details_form.height(class="form-control",value=current_user.get_height()) }}
+                                </p>
+                                <p>
+                                    {{ user_edit_details_form.address_line_1(class="form-control",value=current_user.address_line_1) }}
+                                </p>
+                                <p>
+                                    {{ user_edit_details_form.city(class="form-control",value=current_user.city) }}
+                                </p>
+                                <p>
+                                    {{ user_edit_details_form.postcode(class="form-control",value=current_user.postcode) }}
+                                </p>
+                                    <div class="alert alert-danger" role="alert">
+                                        Please enter your current password to authorise these changes.
+                                    </div>
+                                <p>
+                                    {{ user_edit_details_form.password(class="form-control",placeholder="Password") }}
+                                </p>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-blue" type="submit" onclick=" $('#editDetailsForm').submit();">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- editDetailsModal -->
         </div>
-        <table class="table table-hover" style="text-align:left;">
-            <tr>
-                <th>Firstname</th>
-                <th>Surname</th>
-            </tr>
-            <tr>
-                <td>{{current_user.get_firstname()}}</td>
-                <td>{{current_user.get_surname()}}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <th>Gender</th>
-            </tr>
-            <tr>
-                <td>{{current_user.get_email()}}</td>
-                <td>{{current_user.get_gender()}}</td>
-            </tr>
-            <tr>
-                <th>Height</th>
-                <th>Current Weight</th>
-            </tr>
-            <tr>
-                <td>{{current_user.get_height()}} Meters</td>
-                <td>Coming Soon.</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>{{current_user.get_address()}}</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th>Join Date</th>
-                <th>Last Login Date</th>
-            </tr>
-            <tr>
-                <td>{{current_user.get_join_date()}}</td>
-                <td>{{current_user.get_last_login_date()}}</td>
-            </tr>
-            <tr>
-                <th>Administrator</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>{% if current_user.is_administrator() %}Yes{% else %}No{% endif %}</td>
-                <td></td>
-            </tr>
-        </table>
     </div><!-- .col-md-8 col-md-offset-2 -->
 </div><!-- .row -->
 {% endblock %}

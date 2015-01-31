@@ -8,10 +8,10 @@ Define the routes for the login blueprint.
 
 from flask import flash, redirect, render_template, request, \
                     url_for, Blueprint,abort
-from forms import LoginForm, SignUpForm
+from forms import LoginForm, SignUpForm, EditDetailsForm
 from traininglog import bcrypt, app, db
 from traininglog.models import Member
-from flask.ext.login import login_user, logout_user, login_required
+from flask.ext.login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 
 # Setup the login blueprint.
@@ -145,10 +145,31 @@ def logout():
     flash('You were logged out!')
     return redirect(url_for('home.welcome'))
 
-@login_blueprint.route('/myprofile')
+@login_blueprint.route('/myprofile', methods=['GET','POST'])
 @login_required
 def myprofile():
     """
     Displays the profile of the current user.
     """
-    return render_template('myprofile.html')
+
+    # Create an empty error variable.
+    error = None
+
+    # Create the edit details form.
+    user_edit_details_form = EditDetailsForm()
+
+    if request.method == 'POST':
+        if user_edit_details_form.validate_on_submit():
+            # The form is valid. I.e all the data require is there.
+            # Check the password matches the users password.
+            if bcrypt.check_password_hash(current_user.password,user_edit_details_form.password.data):
+                # Okay that is the correct password make the changes.
+                current_user.update_details(user_edit_details_form.firstname.data, user_edit_details_form.surname.data, user_edit_details_form.email.data, user_edit_details_form.height.data, user_edit_details_form.address_line_1.data, user_edit_details_form.city.data, user_edit_details_form.postcode.data)
+                # Commit the changes.
+                db.session.commit()
+                flash("Successfully updated your personal details.")
+            else:
+                error = "Incorrect Password changes have not been made."
+        else:
+            render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form)
+    return render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form)

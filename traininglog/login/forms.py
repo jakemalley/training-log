@@ -84,9 +84,52 @@ class SignUpForm(Form):
         validators=[DataRequired(),Length(min=5,max=9)]
     )
 
+class EditDetailsForm(Form):
+    """
+    Form for users to edit their personal details. 
+    """
 
-
-
+     # Text field for the users firstname.
+    firstname = TextField(
+        'firstname', 
+        validators=[DataRequired(),Length(min=2,max=20)]
+    )
+    # Text field for the users surname.
+    surname = TextField(
+        'surname', 
+        validators=[DataRequired(), Length(min=2,max=20)]
+    )
+    # Text field for the users email.
+    email = TextField(
+        'email',
+        validators=[DataRequired(),Email(message=None)]
+    )
+    # Decimal field for the users height.
+    height = DecimalField(
+        'height',
+        places=2,
+        validators=[DataRequired(),NumberRange(min=0,max=3)]
+    )
+    # Text field for the first line of the users address.
+    address_line_1 = TextField(
+        'address',
+        validators=[DataRequired(),Length(min=5, max=200)]
+    )
+    # Text field for the users city.
+    city = TextField(
+        'city',
+        validators=[DataRequired(),Length(min=2, max=20)]
+    )
+    # Text field for the users postcode.
+    postcode = TextField(
+        'postcode',
+        validators=[DataRequired(),Length(min=5,max=9)]
+    )
+    # Password field needed for the user to update their details.
+    password = PasswordField(
+        'password',
+        validators=[DataRequired(), Length(min=6,max=32)]
+    )
 
 
 

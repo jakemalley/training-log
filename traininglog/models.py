@@ -71,16 +71,16 @@ class Member(db.Model):
         """
         Constructor sets all the fields in the databased based on the parameters.
         """
-        self.firstname=firstname
-        self.surname=surname
-        self.email=email
+        self.firstname=firstname.lower()
+        self.surname=surname.lower()
+        self.email=email.lower()
         # Hash the password
         self.password=bcrypt.generate_password_hash(password)
         self.gender=gender
         self.height=height
-        self.address_line_1=address_line_1
-        self.city=city
-        self.postcode=postcode
+        self.address_line_1=address_line_1.lower()
+        self.city=city.lower()
+        self.postcode=postcode.upper()
         self.join_date=join_date
         self.last_login_date=last_login_date
         self.is_admin=is_admin
@@ -180,6 +180,19 @@ class Member(db.Model):
         Updates the date of the users last login.
         """
         self.last_login_date=last_login_date
+
+    def update_details(self, firstname, surname, email, height, address_line_1, city, postcode):
+        """
+        Updates the users details to the details given.
+        """
+        print("UPDATEs")
+        self.firstname=firstname.lower()
+        self.surname=surname.lower()
+        self.email=email.lower()
+        self.height=height
+        self.address_line_1=address_line_1.lower()
+        self.city=city.lower()
+        self.postcode=postcode.upper()
 
     def __repr__(self):
         """
