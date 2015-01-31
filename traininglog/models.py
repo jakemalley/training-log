@@ -86,6 +86,7 @@ class Member(db.Model):
         self.is_admin=is_admin
         self.account_is_active=account_is_active
 
+    # Methods for Flask-Login
     def is_authenticated(self):
         """
         Returns true as if there is a user object they are authenticated.
@@ -104,6 +105,13 @@ class Member(db.Model):
         """ 
         return False
 
+    def is_administrator(self):
+        """
+        Returns true if the account has admin privileges.
+        """
+        return bool(self.is_admin)        
+
+    # Get Methods.
     def get_id(self):
         """
         Returns the user's id.
@@ -128,6 +136,45 @@ class Member(db.Model):
         """
         return self.surname.title()
 
+    def get_email(self):
+        """
+        Returns the email all in lower case.
+        """
+        return self.email.lower()
+
+    def get_gender(self):
+        """
+        Returns the gender in a title format.
+        """
+        return self.gender.title()
+
+    def get_height(self):
+        """
+        Returns the height.
+        """
+        return self.height
+
+    def get_address(self):
+        """
+        Returns a string of the full address.
+        """
+        return self.address_line_1.title() + ", " + self.city.title() + ", " + self.postcode.upper()
+
+    def get_join_date(self):
+        """
+        Returns the date the user joined.
+        In the format DD MM YYYY HH:MM
+        """
+        return self.join_date.strftime("%d-%m-%d %H:%M")
+
+    def get_last_login_date(self):
+        """
+        Returns the date the user last logged in.
+        In the format DD MM YYYY HH:MM
+        """
+        return self.last_login_date.strftime("%d-%m-%d %H:%M")
+
+    # Set Methods.
     def set_last_login_date(self,last_login_date):
         """
         Updates the date of the users last login.

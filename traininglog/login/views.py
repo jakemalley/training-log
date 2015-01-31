@@ -144,3 +144,11 @@ def logout():
     logout_user()
     flash('You were logged out!')
     return redirect(url_for('home.welcome'))
+
+@login_blueprint.route('/myprofile')
+@login_required
+def myprofile():
+    """
+    Displays the profile of the current user.
+    """
+    return render_template('myprofile.html')

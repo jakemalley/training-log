@@ -1,0 +1,62 @@
+<!-- Display profile page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}{{ current_user.get_full_name()}}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2" style="text-align:center;padding-top:20px;">
+        <div class="page-header">
+            <h1>{{current_user.get_firstname()}}'s Profile</h1>
+        </div>
+        <table class="table table-hover" style="text-align:left;">
+            <tr>
+                <th>Firstname</th>
+                <th>Surname</th>
+            </tr>
+            <tr>
+                <td>{{current_user.get_firstname()}}</td>
+                <td>{{current_user.get_surname()}}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <th>Gender</th>
+            </tr>
+            <tr>
+                <td>{{current_user.get_email()}}</td>
+                <td>{{current_user.get_gender()}}</td>
+            </tr>
+            <tr>
+                <th>Height</th>
+                <th>Current Weight</th>
+            </tr>
+            <tr>
+                <td>{{current_user.get_height()}} Meters</td>
+                <td>Coming Soon.</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>{{current_user.get_address()}}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Join Date</th>
+                <th>Last Login Date</th>
+            </tr>
+            <tr>
+                <td>{{current_user.get_join_date()}}</td>
+                <td>{{current_user.get_last_login_date()}}</td>
+            </tr>
+            <tr>
+                <th>Administrator</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>{% if current_user.is_administrator() %}Yes{% else %}No{% endif %}</td>
+                <td></td>
+            </tr>
+        </table>
+    </div><!-- .col-md-8 col-md-offset-2 -->
+</div><!-- .row -->
+{% endblock %}
