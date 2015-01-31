@@ -49,8 +49,13 @@ def login():
                     member.set_last_login_date(datetime.utcnow())
                     # Commit changes to the database.
                     db.session.commit()
-                    # Redirect them to the dashboard page.
-                    return redirect(url_for('dashboard.dashboard'))
+                    # If the user was trying to access a page before he was redirected here
+                    # redirect them back to that page.
+                    if request.args.get('next'):
+                        return redirect(request.args.get('next'))
+                    else:
+                        # Redirect them to the dashboard page.
+                        return redirect(url_for('dashboard.dashboard'))
                 else:
                     # The user cannot be logged in.
                     if not member.is_active():
