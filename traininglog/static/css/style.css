@@ -76,3 +76,16 @@ body {
     padding: 10px;
     font-size: 16px;
 }
+
+/* Breadcrumbs */
+#navbar-breadcrumb{
+    margin: 7px;
+    background-color:transparent;
+}
+
+/* Canvas */
+canvas {
+    width: 100% !important;
+    max-width: 800px;
+    height: auto !important;
+}

@@ -1,6 +1,10 @@
 <!-- Display profile page to the users. -->
 {% extends 'dashboard_layout.html' %}
 {% block title %}{{ current_user.get_full_name()}}{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li class="active">{{current_user.get_firstname()}}'s Profile</li>
+{% endblock %}
 {% block content %}
 <div class="row">
     <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
