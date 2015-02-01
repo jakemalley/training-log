@@ -28,6 +28,57 @@
                 {% include 'add_cycling_form.html' %}
             </div>
         </div>
+        <!-- Display recent exercise -->
+        <div class="page-header">
+            <h1><small>Recent Exercise</small></h1>
+        </div>
+        
+        <!-- Show the last 3 entries -->
+        <table class="table table-hover">
+            <tr>
+                <th>Date</th>
+                <th>Exercise</th>
+                <th>Duration</th>
+                <th>Calories Burned</th>
+            </tr>
+            {% for data in exercise_data[:3] %}
+            <tr>
+                <td><a href="#">{{ data.get_date() }}</a></td>
+                <td>{{ data.get_exercise() }}</td>
+                <td>{{ data.exercise_duration }} Hour(s)</td>
+                <td>{{ data.calories_burned }} Calories</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+
+        <button class="btn btn-blue" type="button" data-toggle="collapse" data-target="#all_data_collapse" aria-expanded="false" aria-controls="all_data_collapse">
+            More...
+        </button>
+
+        <!-- The rest of exercise data hidden in a collapse. -->
+        <div class="collapse" id="all_data_collapse" style="margin-top:10px;">
+            <div class="well">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Date</th>
+                        <th>Exercise</th>
+                        <th>Duration</th>
+                        <th>Calories Burned</th>
+                    </tr>
+                    {% for data in exercise_data[3:] %}
+                    <tr>
+                        <td><a href="#">{{ data.get_date() }}</a></td>
+                        <td>{{ data.get_exercise() }}</td>
+                        <td>{{ data.exercise_duration }} Hour(s)</td>
+                        <td>{{ data.calories_burned }} Calories</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        
     </div><!-- .text-box -->
   </div><!-- .col-md-8 col-md-offset-2 -->
 </div><!-- .row -->

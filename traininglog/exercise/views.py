@@ -35,8 +35,10 @@ def index():
     add_cycling_form = AddCyclingForm()
     add_swimming_form = AddSwimmingForm()
 
+    # Get all the exercise data.
+    exercise_data = Exercise.query.order_by(Exercise.id.desc()).limit(10).all()
 
-    return render_template('index.html', add_running_form=add_running_form, add_swimming_form=add_swimming_form, add_cycling_form=add_cycling_form)
+    return render_template('index.html', add_running_form=add_running_form, add_swimming_form=add_swimming_form, add_cycling_form=add_cycling_form, exercise_data=exercise_data)
 
 @exercise_blueprint.route('/add_running', methods=['GET','POST'])
 @login_required
