@@ -131,6 +131,26 @@ class EditDetailsForm(Form):
         validators=[DataRequired(), Length(min=6,max=32)]
     )
 
+class ChangePasswordForm(Form):
+    """
+    Form that allows users to change their password.
+    """
+
+    # Password field needed for the user to change their password
+    current_password = PasswordField(
+        'current_password',
+        validators=[DataRequired()]
+    )
+    # Password field for the new password.
+    new_password = PasswordField(
+        'new_password',
+        validators=[DataRequired(), Length(min=6,max=32)]
+    )
+    # Password field for the new password confirmation.
+    new_password_confirm = PasswordField(
+        'new_password_confirm',
+        validators=[DataRequired(),EqualTo('new_password', message='Passwords must match.')]
+    )
 
 
 
