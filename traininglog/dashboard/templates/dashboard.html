@@ -1,23 +1,89 @@
 <!-- Display dashboard page to the users. -->
 {% extends 'dashboard_layout.html' %}
 {% block title %}Dashboard{% endblock %}
+{%block breadcrumb %}
+<li class="active">Dashboard</li>
+{% endblock %}
 {% block content %}
 <div class="row">
-  <div class="col-md-8 col-md-offset-2" style="text-align:center;padding-top:20px;">
+  <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
     <div class="text-box">
-    <h1>Dashboard</h1>
-    <div id="canvas-holder">
-            <canvas id="chart-area" width="300" height="300"/>
+        <div class="page-header">
+            <h1>Dashboard</h1>
         </div>
+
+        <!-- Progress Bars -->
+        <div class="row">
+            <!-- Total exercised today -->
+            <div class="col-md-6">
+                <p>2 out of 4 hours exercised today.</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
+                    </div>
+                </div>
+            </div>
+            <!-- Total hours -->
+            <div class="col-md-6">
+                <p>Total of 8 out of 10 hours exercised.</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- General Dashboard -->
+        <div class="row">
+            <div class="col-md-4">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Recent Exercise</th>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                    <tr>
+                        <td>Some Exercise</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-4 span6">
+                <div id="canvas-holder">
+                    <canvas id="pie-chart" height="225" width="225"/>
+                </div>
+            </div>
+            <div class="col-md-4">
+                
+            </div>
+        </div>
+
+    <!-- Script for Pie Chart -->
     <script>
         var pieData = {{chart_data|safe}}
 
             window.onload = function(){
-                var ctx = document.getElementById("chart-area").getContext("2d");
+                var ctx = document.getElementById("pie-chart").getContext("2d");
                 window.myPie = new Chart(ctx).Pie(pieData);
             };
     </script>
-    </script><!-- .text-box -->
+    </div><!-- .text-box -->
   </div><!-- .col-md-8 col-md-offset-2 -->
 </div><!-- .row -->
 {% endblock %}
