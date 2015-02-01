@@ -194,6 +194,12 @@ class Member(db.Model):
         self.city=city.lower()
         self.postcode=postcode.upper()
 
+    def update_password(self, new_password):
+        """
+        Updates the password.
+        """
+        self.password=bcrypt.generate_password_hash(new_password)
+
     def __repr__(self):
         """
         Depicts how the object is represented when printed out in the

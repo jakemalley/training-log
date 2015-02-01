@@ -8,9 +8,9 @@ Define the routes for the login blueprint.
 
 from flask import flash, redirect, render_template, request, \
                     url_for, Blueprint,abort
-from forms import LoginForm, SignUpForm, EditDetailsForm
+from forms import LoginForm, SignUpForm, EditDetailsForm, ChangePasswordForm
 from traininglog import bcrypt, app, db
-from traininglog.models import Member
+from traininglog.models import Member,Exercise
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 
@@ -169,7 +169,106 @@ def myprofile():
                 db.session.commit()
                 flash("Successfully updated your personal details.")
             else:
-                error = "Incorrect Password changes have not been made."
+                error = "Incorrect Password, changes have not been made."
         else:
-            render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form)
-    return render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form)
+            render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
+    return render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
+
+@login_blueprint.route('/chgpasswd', methods=['POST','GET'])
+@login_required
+def chgpasswd():
+    """
+    Changes the users password.
+
+    The only available method is POST as the form is on the 'myprofile' page. This 
+    route just validates the form. If the method is GET the user is redirected to the
+    'myprofile' page.
+    """
+
+    if request.method == 'GET':
+        return redirect(url_for('login.myprofile'))
+
+     # Create an empty error variable.
+    error = None
+
+    # Create the change password form.
+    user_change_password_form = ChangePasswordForm()
+
+    if user_change_password_form.validate_on_submit():
+        # The form is valid.
+        # Check the current password is correct.
+        if bcrypt.check_password_hash(current_user.password,user_change_password_form.current_password.data):
+            # If the current password matched update the new password.
+            current_user.update_password(user_change_password_form.new_password.data)
+            # Commit the changes to the database.
+            db.session.commit()
+            # Flash a message to the user.
+            flash("Password has been successfully changed.")
+        else:
+            flash("Invalid password password has not been changed",'error')
+    
+    return render_template('myprofile.html',error=error, user_edit_details_form=EditDetailsForm(), user_change_password_form=user_change_password_form)
+
+@login_blueprint.route('/deleteaccount', methods=['POST','GET'])
+@login_required
+def delete_account():
+    """
+    Deletes the current users account.
+    """
+    
+    # If the got here by GET redirect them.
+    if request.method == 'GET':
+        flash("Invalid URL.",'error')
+        return redirect(url_for('login.myprofile'))
+
+    # Make sure the password was correct
+    if bcrypt.check_password_hash(current_user.password,request.form['password']) and request.form['delete_account'] == 'True':
+        # Delete the users account.
+        # Get their exercise data. 
+        exercise_data = Exercise.query.filter_by(member=current_user).all()
+        # For each piece of data.
+        for data in exercise_data:
+            # Delete the data.
+            db.session.delete(data)
+
+        # Finally delete the user.
+        db.session.delete(current_user)
+        # Make sure that user has been logged out.
+        logout_user()
+        # Commit the changes.
+        db.session.commit()
+        # Flash a message.
+        flash('Account has been delete!')
+        # Redirect to the welcome page.
+        return redirect(url_for('home.welcome'))
+        
+    else:
+        flash("Invalid password account has not been deleted.",'error')
+
+    return redirect(url_for('login.myprofile'))
+
+@login_blueprint.route('/deactivateaccount', methods=['POST','GET'])
+@login_required
+def deactivate_account():
+    """
+    Deactivates the current users account.
+    """
+    # If the got here by GET redirect them.
+    if request.method == 'GET':
+        flash("Invalid URL.",'error')
+        return redirect(url_for('login.myprofile'))
+
+    # Make sure the password was correct
+    if bcrypt.check_password_hash(current_user.password,request.form['password']) and request.form['deactivate_account'] == 'True':
+        # Deactivate the users account.
+        current_user.account_is_active = 0
+        # Commit the changes.
+        db.session.commit()
+        # Logout the user.
+        logout_user()
+        # Flash a message.
+        flash("Account has been deactivated!")
+        # Redirect to the welcome page.
+        return redirect(url_for('home.welcome'))
+    else:
+        flash("Invalid password account has not been deactivated.",'error')

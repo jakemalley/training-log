@@ -5,10 +5,21 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
         <div class="text-box">
-            <div class="page-header">
+
+            <!-- Personal Details -->
+            <div id="personal-details" class="page-header">
                 <h1>{{current_user.get_firstname()}}'s Profile<br/>
                 <small>Personal Details</small></h1>
             </div>
+
+            <!-- If there is an error display it to the user. -->
+            {% if error %}
+                <p class="alert alert-danger">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    {{ error }}
+                </p>
+            {% endif %}
+
             <table class="table table-hover" style="text-align:left;">
                 <tr>
                     <th>Firstname</th>
@@ -60,14 +71,6 @@
                 </tr>
             </table>
 
-            <!-- If there is an error display it to the user. -->
-            {% if error %}
-                <p class="alert alert-danger">
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    {{ error }}
-                </p>
-            {% endif %}
-
             <!-- Errors from the editDetailsForm in the Modal. -->
             {% for field, errors in user_edit_details_form.errors.items() %}
                 <p><span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
@@ -88,7 +91,7 @@
                             <h4 class="modal-title">Edit Personal Details</h4>
                         </div>
                         <div class="modal-body">
-                            <form id="editDetailsForm" class="form-down" role="form" method="post" action="">
+                            <form id="editDetailsForm" class="form-down" role="form" method="post" action="{{ url_for('login.myprofile')}}">
                                 {{ user_edit_details_form.csrf_token }}
                                 <p>
                                 Please amend your personal details and click 'save changes' when done.
@@ -129,6 +132,102 @@
                     </div>
                 </div>
             </div><!-- editDetailsModal -->
+
+            <!-- Change Password -->
+            <div id="change-password" class="page-header">
+                <h1><small>Change Password</small></h1>
+            </div>
+            <form role="form" method="post" action="{{ url_for('login.chgpasswd')}}">
+                {{ user_change_password_form.csrf_token }}
+
+                <div class="form-group">
+                {{ user_change_password_form.current_password(class="form-control",placeholder="Current Password") }}
+                    {% for error in user_change_password_form.current_password.errors %}
+                        <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                        {{ error }}
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                {{ user_change_password_form.new_password(class="form-control",placeholder="New Password") }}
+                    {% for error in user_change_password_form.new_password.errors %}
+                        <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                        {{ error }}
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                {{ user_change_password_form.new_password_confirm(class="form-control",placeholder="Confirm New Password") }}
+                    {% for error in user_change_password_form.new_password_confirm.errors %}
+                        <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                        {{ error }}
+                    {% endfor %}
+                </div>
+
+                <button class="btn btn-blue" type="submit" onclick=" $('#editDetailsForm').submit();">Change Password</button>
+                </form>
+                <br/>
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                    <strong>Danger Zone!</strong>
+                </div>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deactivateAccountModal">Deactivate Your Account.</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal">Delete Your Account.</button>
+
+                <!-- Modal for deactivating your account. -->
+                <div class="modal fade" id="deactivateAccountModal" tabindex="-1" role="dialog" aria-labelledby="Deactivate Account?" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Deactivate Account.</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                                Are you sure you want to deactivate your account? This action cannot be undone!
+                            </div>
+                            <form class="form-inline" id="deactivateAccountForm" method="POST" action="{{ url_for('login.deactivate_account') }}">
+                                <input type="hidden" name="deactivate_account" value="True">
+                                <label for="password">Enter your Password:</label>
+                                <input class="form-control" type="password" name="password" placeholder="password">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-danger" type="submit" onclick=" $('#deactivateAccountForm').submit();">Deactivate Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- deactivateAccountModal -->
+
+            <!-- Modal for deleting your account. -->
+                <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="Delete Account?" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Delete Account.</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                                Are you sure you want to delete your account? This action cannot be undone!
+                            </div>
+                            <form class="form-inline" id="deleteAccountForm" method="POST" action="{{ url_for('login.delete_account') }}">
+                                <input type="hidden" name="delete_account" value="True">
+                                <label for="password">Enter your Password:</label>
+                                <input class="form-control" type="password" name="password" placeholder="password">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-danger" type="submit" onclick=" $('#deleteAccountForm').submit();">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- deactivateAccountModal -->
+
         </div>
     </div><!-- .col-md-8 col-md-offset-2 -->
 </div><!-- .row -->
