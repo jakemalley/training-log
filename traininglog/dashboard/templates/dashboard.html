@@ -4,6 +4,7 @@
 {% block content %}
 <div class="row">
   <div class="col-md-8 col-md-offset-2" style="text-align:center;padding-top:20px;">
+    <div class="text-box">
     <h1>Dashboard</h1>
     <div id="canvas-holder">
             <canvas id="chart-area" width="300" height="300"/>
@@ -16,6 +17,7 @@
                 window.myPie = new Chart(ctx).Pie(pieData);
             };
     </script>
+    </script><!-- .text-box -->
   </div><!-- .col-md-8 col-md-offset-2 -->
 </div><!-- .row -->
 {% endblock %}
