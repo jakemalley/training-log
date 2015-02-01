@@ -13,6 +13,18 @@ from flask import render_template
 from traininglog import app
 
 # Define error handlers for HTTP errors.
+@app.errorhandler(400)
+def error_bad_request(error):
+    """
+    When the server cannot process the request.
+    i.e. it could not be understood by the server.
+    """
+
+    # Create a dictionary with the error and error message.
+    error_dictionary = dict(title="Bad Request", description="The browser (or proxy) sent a request that this server could not understand.", error_code=error)
+    # Display the error page passing the error_dictionary.
+    return render_template("error.html",error_dictionary=error_dictionary)
+
 @app.errorhandler(401)
 def error_page_not_found(error):
     """
