@@ -62,8 +62,32 @@ def init_db():
     in the models.py file. Using the database file specified
     in the config.py
     """
-    from traininglog.models import Member
+    from traininglog.models import Member, Exercise, RunningLookUp, CyclingLookUp, SwimmingLookUp
     db.create_all()
+    db.session.commit()
+
+    # Generate the look up tables.
+    db.session.add(RunningLookUp(1, 472))
+    db.session.add(RunningLookUp(2, 590))
+    db.session.add(RunningLookUp(3, 679))
+    db.session.add(RunningLookUp(4, 797))
+    db.session.add(RunningLookUp(5, 885))
+    db.session.add(RunningLookUp(6, 944))
+
+    db.session.add(CyclingLookUp(1,236))
+    db.session.add(CyclingLookUp(2,354))
+    db.session.add(CyclingLookUp(3,472))
+    db.session.add(CyclingLookUp(4,590))
+    db.session.add(CyclingLookUp(5,708))
+    db.session.add(CyclingLookUp(6,944))
+
+    db.session.add(SwimmingLookUp(1,413))
+    db.session.add(SwimmingLookUp(2,590))
+    db.session.add(SwimmingLookUp(3,413))
+    db.session.add(SwimmingLookUp(4,590))
+    db.session.add(SwimmingLookUp(5,649))
+
+    # Commit Changes.
     db.session.commit()
 
 @manager.command
