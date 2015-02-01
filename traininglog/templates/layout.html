@@ -23,6 +23,7 @@
                     <a class="navbar-brand" href="/">Parkwood Vale Harriers</a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                    {% if user_login_form %}
                     <!-- Add a drop down for navigating between login and signup. -->
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
@@ -33,7 +34,6 @@
                             </ul>
                         </li>
                     </ul>
-                    {% if user_login_form %}
                     <!-- If we have the login form display it -->
                     <form class="navbar-form navbar-right" role="form" method="post" action="{{ url_for('login.login') }}">
                     {{ user_login_form.csrf_token }}
@@ -64,10 +64,14 @@
                 <p class="navbar-text">&copy; Copyright Parkwood Vale Harriers 2015</p>
                 <p class="navbar-text navbar-right"></p>
                 
-                    <!-- Display any flashed (generic messages) to the user. -->
-                    {% for message in get_flashed_messages() %}
+                   <!-- Display any flashed (generic messages) to the user. -->
+                    {% for category, message in get_flashed_messages(with_categories=true) %}
                         <p class="navbar-text pull-right">
+                            {% if category == 'message' %}
                             <span class="glyphicon glyphicon-comment" style="color:#5cb85c;" aria-hidden="true"></span>
+                            {% elif category == 'error' %}
+                            <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                            {% endif %}
                             {{ message }}
                         </p>
                     {% endfor %}
