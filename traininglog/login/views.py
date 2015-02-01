@@ -7,11 +7,11 @@ Define the routes for the login blueprint.
 """
 
 from flask import flash, redirect, render_template, request, \
-                    url_for, Blueprint,abort
+                    url_for, Blueprint
 from forms import LoginForm, SignUpForm, EditDetailsForm, ChangePasswordForm
 from traininglog import bcrypt, app, db
 from traininglog.models import Member,Exercise
-from flask.ext.login import login_user, logout_user, login_required, current_user
+from flask.ext.login import login_user, logout_user, login_required, current_user, fresh_login_required
 from datetime import datetime
 
 # Setup the login blueprint.
@@ -146,7 +146,7 @@ def logout():
     return redirect(url_for('home.welcome'))
 
 @login_blueprint.route('/myprofile', methods=['GET','POST'])
-@login_required
+@fresh_login_required
 def myprofile():
     """
     Displays the profile of the current user.
@@ -175,7 +175,7 @@ def myprofile():
     return render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
 
 @login_blueprint.route('/chgpasswd', methods=['POST','GET'])
-@login_required
+@fresh_login_required
 def chgpasswd():
     """
     Changes the users password.
@@ -210,7 +210,7 @@ def chgpasswd():
     return render_template('myprofile.html',error=error, user_edit_details_form=EditDetailsForm(), user_change_password_form=user_change_password_form)
 
 @login_blueprint.route('/deleteaccount', methods=['POST','GET'])
-@login_required
+@fresh_login_required
 def delete_account():
     """
     Deletes the current users account.
@@ -248,7 +248,7 @@ def delete_account():
     return redirect(url_for('login.myprofile'))
 
 @login_blueprint.route('/deactivateaccount', methods=['POST','GET'])
-@login_required
+@fresh_login_required
 def deactivate_account():
     """
     Deactivates the current users account.

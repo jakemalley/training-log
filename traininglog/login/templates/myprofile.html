@@ -166,10 +166,14 @@
 
                 <button class="btn btn-blue" type="submit" onclick=" $('#editDetailsForm').submit();">Change Password</button>
                 </form>
-                <br/>
+
+                <!-- Delete/Deactivate Account -->
+                <div id="change-password" class="page-header">
+                    <h1><small>Account Settings</small></h1>
+                </div>
                 <div class="alert alert-danger" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
-                    <strong>Danger Zone!</strong>
+                    <strong>Danger Zone!</strong> These actions cannot be undone.
                 </div>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deactivateAccountModal">Deactivate Your Account.</button>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal">Delete Your Account.</button>
@@ -185,7 +189,7 @@
                         <div class="modal-body">
                             <div class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
-                                Are you sure you want to deactivate your account? This action cannot be undone!
+                                Are you sure you want to deactivate your account? You will not be able to run in the charity event. <strong>This action cannot be undone!</strong>
                             </div>
                             <form class="form-inline" id="deactivateAccountForm" method="POST" action="{{ url_for('login.deactivate_account') }}">
                                 <input type="hidden" name="deactivate_account" value="True">
@@ -212,7 +216,7 @@
                         <div class="modal-body">
                             <div class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
-                                Are you sure you want to delete your account? This action cannot be undone!
+                                Are you sure you want to delete your account? All of your exercise data will be removed and you will not be able to run in the charity event. <strong>This action cannot be undone!</strong>
                             </div>
                             <form class="form-inline" id="deleteAccountForm" method="POST" action="{{ url_for('login.delete_account') }}">
                                 <input type="hidden" name="delete_account" value="True">
