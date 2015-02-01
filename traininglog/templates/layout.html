@@ -46,8 +46,7 @@
                     {% else %}
                     <!-- Otherwise just display a link to the login page. -->
                     <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/signup">Sign Up</a></li>
+                    <li><a href="{{ url_for('home.index') }}">Home</a></li>
                     </ul>
                     {% endif %}
                     
