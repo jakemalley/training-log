@@ -1,0 +1,34 @@
+<!-- Display add exercise page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}Add New Exercise{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li class="active">Exercise</li>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
+    <div class="text-box">
+        <div class="page-header">
+            <h1>Add Exercise</h1>
+        </div>
+        <!-- Forms -->
+        <div class="row">
+            <div class="col-md-4">
+                <h1>Swimming</h1>
+                {% include 'add_swimming_form.html' %}
+            </div>
+            
+            <div class="col-md-4">
+                <h1>Running</h1>
+                {% include 'add_running_form.html' %}
+            </div>
+            <div class="col-md-4">
+                <h1>Cycling</h1>
+                {% include 'add_cycling_form.html' %}
+            </div>
+        </div>
+    </div><!-- .text-box -->
+  </div><!-- .col-md-8 col-md-offset-2 -->
+</div><!-- .row -->
+{% endblock %}

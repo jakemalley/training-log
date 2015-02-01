@@ -13,7 +13,56 @@ from traininglog import bcrypt
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
+class RunningLookUp(db.Model):
+
+    """
+    LookUp Table for running.
+    """
+    # The table name.
+    __tablename__ = "RunningLookUp"
+    # Table fields.
+    id = db.Column(db.Integer,primary_key=True)
+    calories_burned = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, id, calories_burned):
+
+        self.id = id
+        self.calories_burned = calories_burned
+
+class CyclingLookUp(db.Model):
+
+    """
+    LookUp Table for cycling.
+    """
+    # The table name.
+    __tablename__ = "CyclingLookUp"
+    # Table fields.
+    id = db.Column(db.Integer,primary_key=True)
+    calories_burned = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, id, calories_burned):
+
+        self.id = id
+        self.calories_burned = calories_burned
+
+class SwimmingLookUp(db.Model):
+
+    """
+    LookUp Table for swimming.
+    """
+    # The table name.
+    __tablename__ = "SwimmingLookUp"
+    # Table fields.
+    id = db.Column(db.Integer,primary_key=True)
+    calories_burned = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, id, calories_burned):
+
+        self.id = id
+        self.calories_burned = calories_burned
+
 class Exercise(db.Model):
+    
     """
     Entity for all the exercise data.
     """
@@ -38,8 +87,26 @@ class Exercise(db.Model):
         self.calories_burned=calories_burned
         self.member_id=member_id
 
-    def get_member():
+    def get_member(self):
         return self.member.get_full_name()
+
+    def get_exercise(self):
+        """
+        Returns the exercise_type.
+        """
+        return self.exercise_type.title()
+
+    def get_date(self):
+        """
+        Returns the date.
+        """
+        return self.date.strftime("%d-%m-%d %H:%M")
+
+    def get_calories_burned(self):
+        """
+        Returns the calories_burned.
+        """
+        return self.calories_burned
 
 class Member(db.Model):
 

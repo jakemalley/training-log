@@ -38,11 +38,13 @@ import traininglog.error
 from traininglog.login.views import login_blueprint
 from traininglog.home.views import home_blueprint
 from traininglog.dashboard.views import dashboard_blueprint
+from traininglog.exercise.views import exercise_blueprint
 
 # Register the blueprints.
 app.register_blueprint(login_blueprint)
 app.register_blueprint(home_blueprint)
 app.register_blueprint(dashboard_blueprint, url_prefix="/dashboard")
+app.register_blueprint(exercise_blueprint, url_prefix="/exercise")
 
 # Import the Member model.
 from traininglog.models import Member
