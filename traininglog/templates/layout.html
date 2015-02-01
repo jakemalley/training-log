@@ -66,10 +66,10 @@
                    <!-- Display any flashed (generic messages) to the user. -->
                     {% for category, message in get_flashed_messages(with_categories=true) %}
                         <p class="navbar-text pull-right">
-                            {% if category == 'message' %}
-                            <span class="glyphicon glyphicon-comment" style="color:#5cb85c;" aria-hidden="true"></span>
-                            {% elif category == 'error' %}
+                            {% if category == 'error' %}
                             <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                            {% else %}
+                            <span class="glyphicon glyphicon-comment" style="color:#5cb85c;" aria-hidden="true"></span>
                             {% endif %}
                             {{ message }}
                         </p>
