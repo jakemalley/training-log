@@ -100,7 +100,7 @@ class Exercise(db.Model):
         """
         Returns the date.
         """
-        return self.date.strftime("%d-%m-%d %H:%M")
+        return self.date.strftime("%d-%m-%y")
 
     def get_calories_burned(self):
         """
@@ -232,14 +232,14 @@ class Member(db.Model):
         Returns the date the user joined.
         In the format DD MM YYYY HH:MM
         """
-        return self.join_date.strftime("%d-%m-%d %H:%M")
+        return self.join_date.strftime("%d-%m-%y %H:%M")
 
     def get_last_login_date(self):
         """
         Returns the date the user last logged in.
         In the format DD MM YYYY HH:MM
         """
-        return self.last_login_date.strftime("%d-%m-%d %H:%M")
+        return self.last_login_date.strftime("%d-%m-%y %H:%M")
 
     # Set Methods.
     def set_last_login_date(self,last_login_date):
