@@ -12,7 +12,7 @@ from flask.ext.login import login_required, current_user
 from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm
 from traininglog.models import Member, Exercise, RunningLookUp, CyclingLookUp, SwimmingLookUp
 from traininglog import db
-from datetime import datetime
+from datetime import datetime, date
 
 # Setup the exercise blueprint.
 exercise_blueprint = Blueprint(
@@ -57,19 +57,26 @@ def add_running():
     if request.method == 'POST':
         # Validate the form.
         if add_running_form.validate_on_submit():
-            # Look Up the calories burned and commit it.
-            # NEED TO DIVIDE THIS BY THE WEIGHT!
-            calories_burned = (RunningLookUp.query.filter_by(id=add_running_form.exercise_level.data).first().calories_burned)*add_running_form.duration.data
+            
             # Get the current time.
             now = datetime.utcnow()
-            # Add the exercise to the database.
-            db.session.add(Exercise(now, 'running', add_running_form.exercise_level.data, add_running_form.duration.data, calories_burned, current_user.get_id()))
-            # Commit the changes.
-            db.session.commit()
-            # Flash a success message.
-            flash("Exercise successfully added.")
-            # Add a well done message.
-            message = "Well Done you burned "+str(calories_burned)+" calories in that session."
+
+            # Make sure they aren't cheating by having more than 24 hours in one day.
+            if get_exercise_total(now) + float(add_running_form.duration.data) <= 24:
+                # Look Up the calories burned and commit it.
+                # NEED TO DIVIDE THIS BY THE WEIGHT!
+                calories_burned = (RunningLookUp.query.filter_by(id=add_running_form.exercise_level.data).first().calories_burned)*add_running_form.duration.data
+                # Add the exercise to the database.
+                db.session.add(Exercise(now, 'running', add_running_form.exercise_level.data, add_running_form.duration.data, calories_burned, current_user.get_id()))
+                # Commit the changes.
+                db.session.commit()
+                # Flash a success message.
+                flash("Exercise successfully added.")
+                # Add a well done message.
+                message = "Well Done you burned "+str(calories_burned)+" calories in that session."
+            else:
+                flash("You cannot exercise for more than 24 hours in one day!",'error')
+                message = "Exercise has not been added as the current total for today exceeds 24 hours."
 
     # Get the last 4 exercises for running.
     running_data = Exercise.query.filter_by(exercise_type='running',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
@@ -93,19 +100,27 @@ def add_cycling():
     if request.method == 'POST':
         # Validate the form.
         if add_cycling_form.validate_on_submit():
-            # Look Up the calories burned and commit it.
-            # NEED TO DIVIDE THIS BY THE WEIGHT!
-            calories_burned = (CyclingLookUp.query.filter_by(id=add_cycling_form.exercise_level.data).first().calories_burned)*add_cycling_form.duration.data
+
             # Get the current time.
             now = datetime.utcnow()
-            # Add the exercise to the database.
-            db.session.add(Exercise(now, 'cycling', add_cycling_form.exercise_level.data, add_cycling_form.duration.data, calories_burned, current_user.get_id()))
-            # Commit the changes.
-            db.session.commit()
-            # Flash a success message.
-            flash("Exercise successfully added.")
-            # Add a well done message.
-            message = "Well Done you burned "+str(calories_burned)+" calories in that session."
+
+            # Make sure they aren't cheating by having more than 24 hours in one day.
+            if get_exercise_total(now) + float(add_cycling_form.duration.data) <= 24:
+                # Look Up the calories burned and commit it.
+                # NEED TO DIVIDE THIS BY THE WEIGHT!
+                calories_burned = (CyclingLookUp.query.filter_by(id=add_cycling_form.exercise_level.data).first().calories_burned)*add_cycling_form.duration.data
+                
+                # Add the exercise to the database.
+                db.session.add(Exercise(now, 'cycling', add_cycling_form.exercise_level.data, add_cycling_form.duration.data, calories_burned, current_user.get_id()))
+                # Commit the changes.
+                db.session.commit()
+                # Flash a success message.
+                flash("Exercise successfully added.")
+                # Add a well done message.
+                message = "Well Done you burned "+str(calories_burned)+" calories in that session."
+            else:
+                flash("You cannot exercise for more than 24 hours in one day!",'error')
+                message = "Exercise has not been added as the current total for today exceeds 24 hours."
 
     # Get the last 4 exercises for running.
     cycling_data = Exercise.query.filter_by(exercise_type='cycling',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
@@ -129,22 +144,40 @@ def add_swimming():
     if request.method == 'POST':
         # Validate the form.
         if add_swimming_form.validate_on_submit():
-            # Look Up the calories burned and commit it.
-            # NEED TO DIVIDE THIS BY THE WEIGHT!
-            calories_burned = (SwimmingLookUp.query.filter_by(id=add_swimming_form.exercise_level.data).first().calories_burned)*add_swimming_form.duration.data
+
             # Get the current time.
             now = datetime.utcnow()
-            # Add the exercise to the database.
-            db.session.add(Exercise(now, 'swimming', add_swimming_form.exercise_level.data, add_swimming_form.duration.data, calories_burned, current_user.get_id()))
-            # Commit the changes.
-            db.session.commit()
-            # Flash a success message.
-            flash("Exercise successfully added.")
-            # Add a well done message.
-            message = "Well Done you burned "+str(calories_burned)+" calories in that session."
+
+            # Make sure they aren't cheating by having more than 24 hours in one day.
+            if get_exercise_total(now) + float(add_swimming_form.duration.data) <= 24:
+                # Look Up the calories burned and commit it.
+                # NEED TO DIVIDE THIS BY THE WEIGHT!
+                calories_burned = (SwimmingLookUp.query.filter_by(id=add_swimming_form.exercise_level.data).first().calories_burned)*add_swimming_form.duration.data
+            
+                # Add the exercise to the database.
+                db.session.add(Exercise(now, 'swimming', add_swimming_form.exercise_level.data, add_swimming_form.duration.data, calories_burned, current_user.get_id()))
+                # Commit the changes.
+                db.session.commit()
+                # Flash a success message.
+                flash("Exercise successfully added.")
+                # Add a well done message.
+                message = "Well Done you burned "+str(calories_burned)+" calories in that session."
+            else:
+                flash("You cannot exercise for more than 24 hours in one day!",'error')
+                message = "Exercise has not been added as the current total for today exceeds 24 hours."
 
     # Get the last 4 exercises for running.
     swimming_data = Exercise.query.filter_by(exercise_type='swimming',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     return render_template('add_swimming.html', add_swimming_form=add_swimming_form, message=message, swimming_data=swimming_data)
 
+# Querying Functions
+def get_exercise_total(date):
+    """
+    Returns the number of hours exercised on the date given.
+    """
+    exercise_data = Exercise.query.filter(Exercise.date>date.date()).filter_by(member=current_user).all()
+    total = 0
+    for data in exercise_data:
+        total += data.exercise_duration
+    return total
