@@ -36,7 +36,7 @@ def index():
     add_swimming_form = AddSwimmingForm()
 
     # Get all the exercise data.
-    exercise_data = Exercise.query.order_by(Exercise.id.desc()).limit(10).all()
+    exercise_data = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).limit(10).all()
 
     return render_template('index.html', add_running_form=add_running_form, add_swimming_form=add_swimming_form, add_cycling_form=add_cycling_form, exercise_data=exercise_data)
 
@@ -72,7 +72,7 @@ def add_running():
             message = "Well Done you burned "+str(calories_burned)+" calories in that session."
 
     # Get the last 4 exercises for running.
-    running_data = Exercise.query.filter_by(exercise_type='running').order_by(Exercise.id.desc()).limit(4).all()
+    running_data = Exercise.query.filter_by(exercise_type='running',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     return render_template('add_running.html', add_running_form=add_running_form, message=message,running_data=running_data)
 
@@ -108,7 +108,7 @@ def add_cycling():
             message = "Well Done you burned "+str(calories_burned)+" calories in that session."
 
     # Get the last 4 exercises for running.
-    cycling_data = Exercise.query.filter_by(exercise_type='cycling').order_by(Exercise.id.desc()).limit(4).all()
+    cycling_data = Exercise.query.filter_by(exercise_type='cycling',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     return render_template('add_cycling.html', add_cycling_form=add_cycling_form, message=message, cycling_data=cycling_data)
     
@@ -144,7 +144,7 @@ def add_swimming():
             message = "Well Done you burned "+str(calories_burned)+" calories in that session."
 
     # Get the last 4 exercises for running.
-    swimming_data = Exercise.query.filter_by(exercise_type='swimming').order_by(Exercise.id.desc()).limit(4).all()
+    swimming_data = Exercise.query.filter_by(exercise_type='swimming',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     return render_template('add_swimming.html', add_swimming_form=add_swimming_form, message=message, swimming_data=swimming_data)
 
