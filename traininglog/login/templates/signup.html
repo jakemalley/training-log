@@ -7,7 +7,6 @@
     <div class="text-box">
       <h1>Please Sign Up.</h1>
       <p>An account is required to access this site.<br/>Please sign up below.</p>
-    </div><!-- .text-box -->
     <form class="form-down" role="form" method="post" action="">
       {{ user_signup_form.csrf_token }}
       <!-- If there is an error display it to the user. -->
@@ -99,6 +98,7 @@
 
       <button class="form-control btn btn-sm btn-blue" type="submit">Sign Up</button>
     </form>
+    </div><!-- .text-box -->
   </div><!-- .col-md-4 col-md-offset-4 -->
 </div><!-- .row -->
 {% endblock %}

@@ -7,7 +7,6 @@
     <div class="text-box">
       <h1>Please Login.</h1>
       <p>A login is required to access the site.</p>
-    </div><!-- .text-box -->
     <form class="form-down" role="form" method="post" action="">
       {{ user_login_form.csrf_token }}
 
@@ -38,6 +37,7 @@
         
       <button class="form-control btn btn-sm btn-blue" type="submit">Sign in</button>
     </form>
+    </div><!-- .text-box -->
   </div><!-- .col-md-4 col-md-offset-4 -->
 </div><!-- .row -->
 {% endblock %}
