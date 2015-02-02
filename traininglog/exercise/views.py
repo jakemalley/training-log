@@ -12,7 +12,7 @@ from flask.ext.login import login_required, current_user
 from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm
 from traininglog.models import Member, Exercise, RunningLookUp, CyclingLookUp, SwimmingLookUp
 from traininglog import db
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 # Setup the exercise blueprint.
 exercise_blueprint = Blueprint(
@@ -61,8 +61,20 @@ def add_running():
             # Get the current time.
             now = datetime.utcnow()
 
+            # Get the last post.
+            last_post = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).first()
+
+            # Check to see if there was a last post.
+            if last_post:
+                # If there was set last_post_date to the date on the post.
+                last_post_date = last_post.date
+            else:
+                # Create an empty datetime object with just todays date no time.
+                last_post_date = datetime(now.year,now.month,now.day)
+
             # Make sure they aren't cheating by having more than 24 hours in one day.
-            if get_exercise_total(now) + float(add_running_form.duration.data) <= 24:
+            # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
+            if (get_exercise_total(now) + float(add_running_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
                 # Look Up the calories burned and commit it.
                 # NEED TO DIVIDE THIS BY THE WEIGHT!
                 calories_burned = (RunningLookUp.query.filter_by(id=add_running_form.exercise_level.data).first().calories_burned)*add_running_form.duration.data
@@ -104,8 +116,20 @@ def add_cycling():
             # Get the current time.
             now = datetime.utcnow()
 
+            # Get the last post.
+            last_post = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).first()
+
+            # Check to see if there was a last post.
+            if last_post:
+                # If there was set last_post_date to the date on the post.
+                last_post_date = last_post.date
+            else:
+                # Create an empty datetime object with just todays date no time.
+                last_post_date = datetime(now.year,now.month,now.day)
+
             # Make sure they aren't cheating by having more than 24 hours in one day.
-            if get_exercise_total(now) + float(add_cycling_form.duration.data) <= 24:
+            # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
+            if (get_exercise_total(now) + float(add_cycling_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
                 # Look Up the calories burned and commit it.
                 # NEED TO DIVIDE THIS BY THE WEIGHT!
                 calories_burned = (CyclingLookUp.query.filter_by(id=add_cycling_form.exercise_level.data).first().calories_burned)*add_cycling_form.duration.data
@@ -119,8 +143,12 @@ def add_cycling():
                 # Add a well done message.
                 message = "Well Done you burned "+str(calories_burned)+" calories in that session."
             else:
-                flash("You cannot exercise for more than 24 hours in one day!",'error')
-                message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                # Make the correct error message.
+                flash("An error occurred adding that exercise.",'error')
+                if (get_exercise_total(now) + float(add_cycling_form.duration.data) > 24):
+                    message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                else:
+                    message = "You have tried to add too many events in the last 30 seconds, please wait then try again."
 
     # Get the last 4 exercises for running.
     cycling_data = Exercise.query.filter_by(exercise_type='cycling',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
@@ -148,8 +176,20 @@ def add_swimming():
             # Get the current time.
             now = datetime.utcnow()
 
+            # Get the last post.
+            last_post = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).first()
+
+            # Check to see if there was a last post.
+            if last_post:
+                # If there was set last_post_date to the date on the post.
+                last_post_date = last_post.date
+            else:
+                # Create an empty datetime object with just todays date no time.
+                last_post_date = datetime(now.year,now.month,now.day)
+
             # Make sure they aren't cheating by having more than 24 hours in one day.
-            if get_exercise_total(now) + float(add_swimming_form.duration.data) <= 24:
+            # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
+            if (get_exercise_total(now) + float(add_swimming_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
                 # Look Up the calories burned and commit it.
                 # NEED TO DIVIDE THIS BY THE WEIGHT!
                 calories_burned = (SwimmingLookUp.query.filter_by(id=add_swimming_form.exercise_level.data).first().calories_burned)*add_swimming_form.duration.data
