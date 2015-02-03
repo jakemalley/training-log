@@ -1,0 +1,37 @@
+<!-- Display add weight page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}Add Weight{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li><a href="{{ url_for('weight.index') }}">Weight</a></li>
+<li class="active">Add Weight</li>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4" style="padding-top:20px;">
+    <div class="text-box">
+        <a href="{{ url_for('weight.index') }}">Back</a>
+        <div class="page-header">
+            <h1>Add Weight</h1>
+        </div>
+
+        <p>Update your weight below by entering your current weight and click "Add Weight"</p>
+
+        <!-- Display the form. -->
+        <form role="form" method="post" action="{{ url_for('weight.add_weight') }}">
+            {{ add_weight_form.csrf_token }}
+            <div class="form-group">
+                {{ add_weight_form.weight(class="form-control", placeholder="New Weight") }}
+                {% for error in add_weight_form.weight.errors %}
+                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                    {{ error }}
+                {% endfor %}
+            </div>
+
+            <button class="btn btn-blue" type="submit">Add Weight</button>
+        </form>
+
+    </div><!-- .text-box -->
+  </div><!-- .col-md-4 col-md-offset-4 -->
+</div><!-- .row -->
+{% endblock %}

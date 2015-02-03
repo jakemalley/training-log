@@ -71,13 +71,15 @@ class Weight(db.Model):
     __tablename__ = "Weight"
     # Table fields.
     id = db.Column(db.Integer,primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
     weight = db.Column(db.Float, nullable=False)
     member_id = db.Column(db.Integer, ForeignKey('Member.id'))
 
-    def __init__(self, weight, member_id):
+    def __init__(self, weight, date, member_id):
 
         self.weight=weight
         self.member_id=member_id
+        self.date=date
 
     # Get methods.
     def get_weight(self):
@@ -85,6 +87,18 @@ class Weight(db.Model):
         Returns the weight as a float.
         """
         return float(self.weight)
+
+    def get_date(self):
+        """
+        Returns the date.
+        """
+        return self.date.strftime("%d-%m-%y")
+
+    def get_date_str(self):
+        """
+        Returns the date.
+        """
+        return str(self.date.strftime("%d-%m-%y"))
 
     def get_member(self):
         """
