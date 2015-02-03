@@ -87,8 +87,12 @@ def add_running():
                 # Add a well done message.
                 message = "Well Done you burned "+str(calories_burned)+" calories in that session."
             else:
-                flash("You cannot exercise for more than 24 hours in one day!",'error')
-                message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                # Make the correct error message.
+                flash("An error occurred adding that exercise.",'error')
+                if (get_exercise_total(now) + float(add_running_form.duration.data) > 24):
+                    message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                else:
+                    message = "You have tried to add too many events in the last 30 seconds, please wait then try again."
 
     # Get the last 4 exercises for running.
     running_data = Exercise.query.filter_by(exercise_type='running',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
@@ -203,13 +207,37 @@ def add_swimming():
                 # Add a well done message.
                 message = "Well Done you burned "+str(calories_burned)+" calories in that session."
             else:
-                flash("You cannot exercise for more than 24 hours in one day!",'error')
-                message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                # Make the correct error message.
+                flash("An error occurred adding that exercise.",'error')
+                if (get_exercise_total(now) + float(add_swimming_form.duration.data) > 24):
+                    message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                else:
+                    message = "You have tried to add too many events in the last 30 seconds, please wait then try again."
 
     # Get the last 4 exercises for running.
     swimming_data = Exercise.query.filter_by(exercise_type='swimming',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     return render_template('add_swimming.html', add_swimming_form=add_swimming_form, message=message, swimming_data=swimming_data)
+
+@exercise_blueprint.route('/view')
+@login_required
+def view():
+    """
+    Page to display a table of all the users exercise.
+    It allows users to then click on specific events,
+    which can then be viewed with view_exercise
+    """
+    pass
+
+@exercise_blueprint.route('/view/<exercise_id>')
+@login_required
+def view_exercise(exercise_id):
+    """
+    Page to display a single exercise event.
+    Displays the event with the id = exercise_id
+    """
+
+    exercise = Exercise.query.filter_by(id=exercise_id).first()
 
 # Querying Functions
 def get_exercise_total(date):
