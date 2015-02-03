@@ -61,6 +61,38 @@ class SwimmingLookUp(db.Model):
         self.id = id
         self.calories_burned = calories_burned
 
+class Weight(db.Model):
+
+    """
+    Entity for all the weight data.
+    """
+
+    # The table name.
+    __tablename__ = "Weight"
+    # Table fields.
+    id = db.Column(db.Integer,primary_key=True)
+    weight = db.Column(db.Float, nullable=False)
+    member_id = db.Column(db.Integer, ForeignKey('Member.id'))
+
+    def __init__(self, weight, member_id):
+
+        self.weight=weight
+        self.member_id=member_id
+
+    # Get methods.
+    def get_weight(self):
+        """
+        Returns the weight as a float.
+        """
+        return float(self.weight)
+
+    def get_member(self):
+        """
+        Returns the member object.
+        """
+        return self.member
+
+
 class Exercise(db.Model):
     
     """
@@ -87,8 +119,18 @@ class Exercise(db.Model):
         self.calories_burned=calories_burned
         self.member_id=member_id
 
-    def get_member(self):
+    # Get methods.
+    def get_member_name(self):
+        """
+        Returns the full name of the member.
+        """
         return self.member.get_full_name()
+
+    def get_member(self):
+        """
+        Returns the member object.
+        """
+        return self.member
 
     def get_exercise(self):
         """
@@ -132,6 +174,7 @@ class Member(db.Model):
     account_is_active = db.Column(db.Boolean, nullable=False)
     # Relationship for exercise.
     exercise_data = relationship("Exercise", backref="member")
+    weight_data = relationship("Weight", backref="member")
 
     def __init__(self, firstname, surname, email, password, gender, height, address_line_1, city, postcode, join_date, last_login_date, is_admin=0, account_is_active=1):
         
