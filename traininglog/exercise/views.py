@@ -10,7 +10,7 @@ from flask import flash, redirect, render_template, \
                 request, url_for, Blueprint
 from flask.ext.login import login_required, current_user
 from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm
-from traininglog.models import Member, Exercise, RunningLookUp, CyclingLookUp, SwimmingLookUp
+from traininglog.models import Member, Exercise, Weight,  RunningLookUp, CyclingLookUp, SwimmingLookUp
 from traininglog import db
 from datetime import datetime, date, timedelta
 
@@ -76,8 +76,12 @@ def add_running():
             # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
             if (get_exercise_total(now) + float(add_running_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
                 # Look Up the calories burned and commit it.
-                # NEED TO DIVIDE THIS BY THE WEIGHT!
-                calories_burned = (RunningLookUp.query.filter_by(id=add_running_form.exercise_level.data).first().calories_burned)*add_running_form.duration.data
+                
+                # Get users most recent weight.
+                user_weight = Weight.query.filter_by(member=current_user).order_by(Weight.id.desc()).first().get_weight()
+
+                calories_burned = (float(RunningLookUp.query.filter_by(id=add_running_form.exercise_level.data).first().calories_burned)/80)*user_weight*float(add_running_form.duration.data)
+
                 # Add the exercise to the database.
                 db.session.add(Exercise(now, 'running', add_running_form.exercise_level.data, add_running_form.duration.data, calories_burned, current_user.get_id()))
                 # Commit the changes.
@@ -135,8 +139,11 @@ def add_cycling():
             # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
             if (get_exercise_total(now) + float(add_cycling_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
                 # Look Up the calories burned and commit it.
-                # NEED TO DIVIDE THIS BY THE WEIGHT!
-                calories_burned = (CyclingLookUp.query.filter_by(id=add_cycling_form.exercise_level.data).first().calories_burned)*add_cycling_form.duration.data
+                
+                # Get users most recent weight.
+                user_weight = Weight.query.filter_by(member=current_user).order_by(Weight.id.desc()).first().get_weight()
+
+                calories_burned = (float(CyclingLookUp.query.filter_by(id=add_cycling_form.exercise_level.data).first().calories_burned)/80)*user_weight*float(add_cycling_form.duration.data)
                 
                 # Add the exercise to the database.
                 db.session.add(Exercise(now, 'cycling', add_cycling_form.exercise_level.data, add_cycling_form.duration.data, calories_burned, current_user.get_id()))
@@ -195,8 +202,11 @@ def add_swimming():
             # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
             if (get_exercise_total(now) + float(add_swimming_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
                 # Look Up the calories burned and commit it.
-                # NEED TO DIVIDE THIS BY THE WEIGHT!
-                calories_burned = (SwimmingLookUp.query.filter_by(id=add_swimming_form.exercise_level.data).first().calories_burned)*add_swimming_form.duration.data
+                
+                # Get users most recent weight.
+                user_weight = Weight.query.filter_by(member=current_user).order_by(Weight.id.desc()).first().get_weight()
+
+                calories_burned = (float(SwimmingLookUp.query.filter_by(id=add_swimming_form.exercise_level.data).first().calories_burned)/80)*user_weight*float(add_swimming_form.duration.data)
             
                 # Add the exercise to the database.
                 db.session.add(Exercise(now, 'swimming', add_swimming_form.exercise_level.data, add_swimming_form.duration.data, calories_burned, current_user.get_id()))
