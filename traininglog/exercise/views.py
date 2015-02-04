@@ -237,7 +237,9 @@ def view():
     It allows users to then click on specific events,
     which can then be viewed with view_exercise
     """
-    pass
+    all_exercise_data = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).all()
+
+    return render_template('view.html',all_exercise_data=all_exercise_data,member=current_user)
 
 @exercise_blueprint.route('/view/<exercise_id>')
 @login_required
@@ -246,8 +248,12 @@ def view_exercise(exercise_id):
     Page to display a single exercise event.
     Displays the event with the id = exercise_id
     """
-
+    
     exercise = Exercise.query.filter_by(id=exercise_id).first()
+
+    all_exercise_data = Exercise.query.filter_by(member=exercise.member).order_by(Exercise.id.desc()).all()
+
+    return render_template('view.html',all_exercise_data=all_exercise_data,exercise=exercise,member=exercise.member)
 
 # Querying Functions
 def get_exercise_total(date):

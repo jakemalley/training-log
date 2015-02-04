@@ -44,7 +44,7 @@
             </tr>
             {% for data in exercise_data[:3] %}
             <tr>
-                <td><a href="#">{{ data.get_date() }}</a></td>
+                <td><a href="{{ url_for('exercise.view_exercise',exercise_id=data.id) }}">{{ data.get_date() }}</a></td>
                 <td>{{ data.get_exercise() }}</td>
                 <td>{{ data.exercise_duration }} Hour(s)</td>
                 <td>{{ data.calories_burned }} Calories</td>
@@ -71,7 +71,7 @@
                     </tr>
                     {% for data in exercise_data[3:] %}
                     <tr>
-                        <td><a href="#">{{ data.get_date() }}</a></td>
+                        <td><a href="{{ url_for('exercise.view_exercise',exercise_id=data.id) }}">{{ data.get_date() }}</a></td>
                         <td>{{ data.get_exercise() }}</td>
                         <td>{{ data.exercise_duration }} Hour(s)</td>
                         <td>{{ data.calories_burned }} Calories</td>

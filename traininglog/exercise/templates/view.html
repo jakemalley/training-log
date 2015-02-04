@@ -1,0 +1,73 @@
+<!-- Display View page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}View Exercise{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li><a href="{{ url_for('exercise.index') }}">Exercise</a></li>
+<li class="active">View Exercise</li>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
+    <div class="text-box">
+        <a href="{{ url_for('exercise.index') }}">Back</a>
+        
+        {% if exercise %}
+            <!-- If there is a single event -->
+            <div class="page-header">
+                <h1>{{member.get_firstname()}}'s Exercise<br/>
+                <small>Event ID = {{exercise.id}}</small></h1>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th>Date:</th>
+                    <th>Exercise:</th>
+                    <th>Duration:</th>
+                    <th>Calories Burned:</th>
+                    <th>Member:</th>
+                </tr>
+                <tr>
+                    <td><a href="{{ url_for('exercise.view_exercise',exercise_id=exercise.id) }}">{{ exercise.get_date() }}</a></td>
+                    <td>{{ exercise.get_exercise() }}</td>
+                    <td>{{ exercise.exercise_duration }} Hour(s)</td>
+                    <td>{{ exercise.calories_burned }} Calories</td>
+                    <td>{{ exercise.get_member_name() }}</td>
+                </tr>
+            </table>
+
+            <!-- All Exercise with single event. -->
+            <div class="page-header">
+                <h1><br/><small>All Exercise</small></h1>
+            </div>
+        {% else %}
+            <!-- All Exercise without single event.-->
+            <div class="page-header">
+                <h1>{{member.get_firstname()}}'s Exercise<br/>
+                <small>All Exercise</small></h1>
+            </div>
+        {% endif %}
+
+        
+        <table class="table table-hover">
+            <tr>
+                <th>Date:</th>
+                <th>Exercise:</th>
+                <th>Duration:</th>
+                <th>Calories Burned:</th>
+                <th>Member:</th>
+            </tr>
+            {% for data in all_exercise_data %}
+            <tr>
+                <td><a href="{{ url_for('exercise.view_exercise',exercise_id=data.id) }}">{{ data.get_date() }}</a></td>
+                <td>{{ data.get_exercise() }}</td>
+                <td>{{ data.exercise_duration }} Hour(s)</td>
+                <td>{{ data.calories_burned }} Calories</td>
+                <td>{{ data.get_member_name() }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div><!-- .text-box -->
+  </div><!-- .col-md-8 col-md-offset-2 -->
+</div><!-- .row -->
+{% endblock %}

@@ -33,7 +33,7 @@
         <table class="table table-hover">
             {% for data in swimming_data %}
             <tr>
-                <td><a href="#">{{ data.get_date() }} - Calories Burnt {{ data.get_calories_burned() }}</a></td>
+                <td><a href="{{ url_for('exercise.view_exercise',exercise_id=data.id) }}">{{ data.get_date() }} - Calories Burnt {{ data.get_calories_burned() }}</a></td>
             </tr>
             {% endfor %}
         </table>
