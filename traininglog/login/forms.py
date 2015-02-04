@@ -68,6 +68,12 @@ class SignUpForm(Form):
         places=2,
         validators=[DataRequired(),NumberRange(min=0,max=3)]
     )
+    # Decimal field for the users weight.
+    weight = DecimalField(
+        'weight',
+        places=2,
+        validators=[DataRequired(),NumberRange(min=0,max=250)]
+    )
     # Text field for the first line of the users address.
     address_line_1 = TextAreaField(
         'address',

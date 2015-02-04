@@ -73,6 +73,14 @@
       </p>
 
       <p>
+        {{ user_signup_form.weight(class="form-control",placeholder="Weight") }}
+        {% for error in user_signup_form.weight.errors %}
+          <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+          {{ error }}
+        {% endfor %}
+      </p>
+
+      <p>
         {{ user_signup_form.address_line_1(class="form-control",style="max-width:100%;max-height:80px;",placeholder="Address Line 1") }}
         {% for error in user_signup_form.address_line_1.errors %}
           <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>

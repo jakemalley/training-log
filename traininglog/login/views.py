@@ -10,7 +10,7 @@ from flask import flash, redirect, render_template, request, \
                     url_for, Blueprint
 from forms import LoginForm, SignUpForm, EditDetailsForm, ChangePasswordForm
 from traininglog import bcrypt, app, db
-from traininglog.models import Member,Exercise
+from traininglog.models import Member,Exercise,Weight
 from flask.ext.login import login_user, logout_user, login_required, current_user, fresh_login_required
 from datetime import datetime
 
@@ -112,6 +112,10 @@ def signup():
                 member = Member(user_signup_form.firstname.data, user_signup_form.surname.data, user_signup_form.email.data, user_signup_form.password.data, user_signup_form.gender.data, user_signup_form.height.data, user_signup_form.address_line_1.data,user_signup_form.city.data, user_signup_form.postcode.data,now,now,is_admin, is_active)
 
                 db.session.add(member)
+                db.session.commit()
+
+                # Add the users weight to the weight table.
+                db.session.add(Weight(user_signup_form.weight.data, now, Member.query.filter_by(email=user_signup_form.email.data).first().id))
                 db.session.commit()
 
                 # Redirect them to the dashboard. (Also log them in.)
