@@ -152,6 +152,12 @@ class Exercise(db.Model):
         """
         return self.exercise_type.title()
 
+    def get_datetime(self):
+        """
+        Returns a string of the date and time.
+        """
+        return str(self.date.strftime("%d-%m-%y %H:%M"))
+
     def get_date(self):
         """
         Returns the date.
