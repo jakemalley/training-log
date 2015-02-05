@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
 <div class="row">
-  <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
+  <div class="col-md-12" style="padding-top:20px;">
     <div class="text-box">
         <div class="page-header">
             <h1>Dashboard</h1>
@@ -20,17 +20,17 @@
         <div class="row">
             <!-- Total exercised today -->
             <div class="col-md-6">
-                <p>2 out of 4 hours exercised today.</p>
+                <p>{{exercise_total_today}} out of {% if exercise_total_today>4 %}{{exercise_total_today}}{% else %}4.0{% endif %} hours exercised today.</p>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{exercise_total_today}}" aria-valuemin="0" aria-valuemax="4" style="width: {{ progress_today_width}}%;">
                     </div>
                 </div>
             </div>
             <!-- Total hours -->
             <div class="col-md-6">
-                <p>Total of 8 out of 10 hours exercised.</p>
+                <p>Total of {{ exercise_total_year }} out of 1460.0 hours exercised this year.</p>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ exercise_total_year }}" aria-valuemin="0" aria-valuemax="1460" style="width: {{progress_year_width}}%;">
                     </div>
                 </div>
             </div>
@@ -38,6 +38,7 @@
         <!-- General Dashboard -->
         <div class="row">
             <div class="col-md-4">
+                <h2><small>Recent Exercise</small></h2>
                 <table class="table table-hover">
                     {% for data in exercise_data %}
                     <tr>
@@ -47,25 +48,51 @@
                 </table>
             </div>
             <div class="col-md-4 span6">
+                <h2 class="center"><small>Hours Exercised</small></h2>
                 <div id="canvas-holder">
-                    <canvas id="pie-chart" height="225" width="225"/>
+                    <canvas id="pie-chart" height="400" width="400"/>
                 </div>
             </div>
             <div class="col-md-4">
-                
+                <h2 class="center"><small>Calories Burned</small></h2>  
+                <div>
+                    <!-- The line chart -->
+                    <canvas id="line_canvas" height="200" width="200"></canvas>
+                </div>
             </div>
         </div>
 
     <!-- Script for Pie Chart -->
     <script>
-        var pieData = {{chart_data|safe}}
+        var lineChartData = {
+                labels : {{line_chart_labels|safe}},
+                datasets : [
+                    {
+                        label: "My Exercise",
+                        fillColor : "rgba(151,187,205,0.2)",
+                        strokeColor : "rgba(151,187,205,1)",
+                        pointColor : "rgba(151,187,205,1)",
+                        pointStrokeColor : "#fff",
+                        pointHighlightFill : "#fff",
+                        pointHighlightStroke : "rgba(151,187,205,1)",
+                        data : {{line_chart_data|safe}}
+                    }
+                ]
 
-            window.onload = function(){
-                var ctx = document.getElementById("pie-chart").getContext("2d");
+            }
+
+        window.onload = function(){
+            var ctx = document.getElementById("line_canvas").getContext("2d");
+            window.myLine = new Chart(ctx).Line(lineChartData, {
+                responsive: true
+            });
+            var ctx = document.getElementById("pie-chart").getContext("2d");
                 window.myPie = new Chart(ctx).Pie(pieData);
-            };
+        }
+        var pieData = {{pie_chart_data|safe}}
+
     </script>
     </div><!-- .text-box -->
-  </div><!-- .col-md-8 col-md-offset-2 -->
+  </div><!-- .col-md-12 -->
 </div><!-- .row -->
 {% endblock %}
