@@ -32,15 +32,23 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Messages -->
+                        {% if current_user.message_data %}
+                        <!-- If there is any messages -->
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Messages<span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span> Messages<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                {% for message in current_user.message_data[::-1] %}
-                                    <li><a href="">{{message.get_message()}}</a></li>
+                                {% for msg in current_user.message_data[::-1] %}
+                                    <li>
+                                        <a href="{{url_for('login.delete_message',message_id=msg.id)}}">
+                                            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                            {{msg.get_message()}}
+                                        </a>
+                                    </li>
                                     <li class="divider"></li>
                                 {% endfor %}
                             </ul>
                         </li>
+                        {% endif %}
                         <!-- Exercise -->
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Exercise<span class="caret"></span></a>

@@ -10,7 +10,7 @@ from flask import flash, redirect, render_template, request, \
                     url_for, Blueprint
 from forms import LoginForm, SignUpForm, EditDetailsForm, ChangePasswordForm
 from traininglog import bcrypt, app, db
-from traininglog.models import Member,Exercise,Weight
+from traininglog.models import Member,Exercise,Weight,Message
 from flask.ext.login import login_user, logout_user, login_required, current_user, fresh_login_required
 from datetime import datetime
 
@@ -276,3 +276,25 @@ def deactivate_account():
         return redirect(url_for('home.welcome'))
     else:
         flash("Invalid password account has not been deactivated.",'error')
+
+@login_blueprint.route('/message/<message_id>')
+@login_required
+def delete_message(message_id):
+    """
+    Deletes the message with the id.
+    """
+
+    # Query for the message.
+    msg = Message.query.filter_by(member=current_user, id=message_id).first()
+    # If the message exists.
+    if msg is not None:
+        db.session.delete(msg)
+        db.session.commit()
+        flash("Message Deleted")
+    else:
+        flash("Cannot delete message.","error")
+
+    # Return to the dashboard.
+    return redirect(url_for('dashboard.dashboard'))
+
+
