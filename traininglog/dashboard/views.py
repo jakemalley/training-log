@@ -31,19 +31,19 @@ def dashboard():
                     'value': get_hours_running(),
                     'color':"#F7464A",
                     'highlight': "#FF5A5E",
-                    'label': "Running"
-                },
-                {
-                    'value': get_hours_cycling(),
-                    'color': "#46BFBD",
-                    'highlight': "#5AD3D1",
-                    'label': "Swimming"
+                    'label': "Hours Running"
                 },
                 {
                     'value': get_hours_swimming(),
+                    'color': "#46BFBD",
+                    'highlight': "#5AD3D1",
+                    'label': "Hours Swimming"
+                },
+                {
+                    'value': get_hours_cycling(),
                     'color': "#FDB45C",
                     'highlight': "#FFC870",
-                    'label': "Cycling"
+                    'label': "Hours Cycling"
                 }]
 
     # Data for the line chart.
