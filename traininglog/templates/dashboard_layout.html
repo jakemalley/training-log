@@ -32,6 +32,16 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Exercise<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url_for('exercise.index')}}">All Exercise</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ url_for('exercise.add_running')}}">Add Running</a></li>
+                                <li><a href="{{ url_for('exercise.add_cycling')}}">Add Cycling</a></li>
+                                <li><a href="{{ url_for('exercise.add_swimming')}}">Add Swimming</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ current_user.get_full_name() }} <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url_for('login.myprofile')}}">My Profile</a></li>
