@@ -61,6 +61,38 @@ class SwimmingLookUp(db.Model):
         self.id = id
         self.calories_burned = calories_burned
 
+class Message(db.Model):
+
+    """
+    Entity to store the messages.
+    """
+
+    # The table name.
+    __tablename__ = "Message"
+    # The table fields.
+    id = db.Column(db.Integer,primary_key=True)
+    date = db.Column(db.DateTime, nullable=False)
+    message_text = db.Column(db.String, nullable=False)
+    member_id = db.Column(db.Integer, ForeignKey('Member.id'))
+
+    def __init__(self, date, message_text, member_id):
+
+        self.date=date
+        self.message_text=message_text
+        self.member_id=member_id
+
+    def get_message(self):
+        """
+        Returns the message text.
+        """
+        return self.message_text
+
+    def get_date_str(self):
+        """
+        Returns the date.
+        """
+        return str(self.date.strftime("%d-%m-%y"))
+
 class Weight(db.Model):
 
     """
@@ -195,6 +227,7 @@ class Member(db.Model):
     # Relationship for exercise.
     exercise_data = relationship("Exercise", backref="member")
     weight_data = relationship("Weight", backref="member")
+    message_data = relationship("Message", backref="member")
 
     def __init__(self, firstname, surname, email, password, gender, height, address_line_1, city, postcode, join_date, last_login_date, is_admin=0, account_is_active=1):
         
