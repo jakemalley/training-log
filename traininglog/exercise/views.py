@@ -302,7 +302,7 @@ def compare(member_id):
 
 @exercise_blueprint.route('/picktheteam')
 @login_required
-def compare():
+def picktheteam():
     """
     Page to display the team of eight runners.
     """
