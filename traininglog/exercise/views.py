@@ -265,7 +265,9 @@ def view_exercise(exercise_id):
 @exercise_blueprint.route('/compare/<member_id>')
 @login_required
 def compare(member_id):
-
+    """
+    Page to compare to users.
+    """
 
     compare_member1 = current_user
     compare_member2 = Member.query.filter_by(id=member_id).first()
@@ -298,4 +300,12 @@ def compare(member_id):
 
     return render_template('compare.html',compare_member1_data=compare_member1_data,compare_member2_data=compare_member2_data)
 
+@exercise_blueprint.route('/picktheteam')
+@login_required
+def compare():
+    """
+    Page to display the team of eight runners.
+    """
+
+    return "Pick the team"
 
