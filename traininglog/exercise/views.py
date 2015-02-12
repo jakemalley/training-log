@@ -10,9 +10,10 @@ from flask import flash, redirect, render_template, \
                 request, url_for, Blueprint
 from flask.ext.login import login_required, current_user
 from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm
-from traininglog.models import Member, Exercise, Weight,  RunningLookUp, CyclingLookUp, SwimmingLookUp
+from traininglog.models import Member, Exercise, Weight, Message, RunningLookUp, CyclingLookUp, SwimmingLookUp
 from traininglog import db
 from datetime import datetime, date, timedelta
+from querying_functions import *
 
 # Setup the exercise blueprint.
 exercise_blueprint = Blueprint(
@@ -251,17 +252,50 @@ def view_exercise(exercise_id):
     
     exercise = Exercise.query.filter_by(id=exercise_id).first()
 
+    if exercise.member != current_user:
+        # If you are viewing another users exercise.
+        db.session.add(Message(datetime.utcnow(), current_user.get_full_name()+" Viewed your exercise", exercise.member.get_id()))
+        # Commit the changes.
+        db.session.commit()
+
     all_exercise_data = Exercise.query.filter_by(member=exercise.member).order_by(Exercise.id.desc()).all()
 
     return render_template('view.html',all_exercise_data=all_exercise_data,exercise=exercise,member=exercise.member)
 
-# Querying Functions
-def get_exercise_total(date):
-    """
-    Returns the number of hours exercised on the date given.
-    """
-    exercise_data = Exercise.query.filter(Exercise.date>date.date()).filter_by(member=current_user).all()
-    total = 0
-    for data in exercise_data:
-        total += data.exercise_duration
-    return total
+@exercise_blueprint.route('/compare/<member_id>')
+@login_required
+def compare(member_id):
+
+
+    compare_member1 = current_user
+    compare_member2 = Member.query.filter_by(id=member_id).first()
+
+    # Get todays date.
+    now = datetime.utcnow()
+
+    compare_member1_data = {
+                            "name":compare_member1.get_full_name(),
+                            "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member1),
+                            "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member1),
+                            "running_time":get_hours_running(member=compare_member1),
+                            "running_cals":get_cals_running(member=compare_member1),
+                            "cycling_time":get_hours_cycling(member=compare_member1),
+                            "cycling_cals":get_cals_cycling(member=compare_member1),
+                            "swimming_time":get_hours_swimming(member=compare_member1),
+                            "swimming_cals":get_cals_swimming(member=compare_member1),
+                            }
+    compare_member2_data = {
+                            "name":compare_member2.get_full_name(),
+                            "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member2),
+                            "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member2),
+                            "running_time":get_hours_running(member=compare_member2),
+                            "running_cals":get_cals_running(member=compare_member2),
+                            "cycling_time":get_hours_cycling(member=compare_member2),
+                            "cycling_cals":get_cals_cycling(member=compare_member2),
+                            "swimming_time":get_hours_swimming(member=compare_member2),
+                            "swimming_cals":get_cals_swimming(member=compare_member2),
+                            }
+
+    return render_template('compare.html',compare_member1_data=compare_member1_data,compare_member2_data=compare_member2_data)
+
+

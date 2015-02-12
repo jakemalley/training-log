@@ -1,0 +1,68 @@
+<!-- Display compare page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}Compare Exercise{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li><a href="{{ url_for('exercise.index') }}">Exercise</a></li>
+<li class="active">Compare Exercise</li>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12" style="padding-top:20px;">
+    <div class="text-box">
+        <a href="{{ url_for('exercise.index') }}">Back</a>
+
+            <div class="page-header">
+                <h1>Compare All Time Exercise</h1>
+            </div>
+
+            <!-- Comparisons password -->
+            <table class="table table-hover">
+                <tr>
+                    <th>Member:</th>
+                    <td>{{compare_member1_data["name"]}}</td>
+                    <td></td>
+                    <td>{{compare_member2_data["name"]}}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>Time</th>
+                    <th>Calories</th>
+                    <th>Time</th>
+                    <th>Calories</th>
+                </tr>
+                <tr>
+                    <th>Total:</th>
+                    <td>{{compare_member1_data["total_time"]}} Hour(s)</td>
+                    <td>{{compare_member1_data["total_cals"]}} Calorie(s)</td>
+                    <td>{{compare_member2_data["total_time"]}} Hour(s)</td>
+                    <td>{{compare_member2_data["total_cals"]}} Calorie(s)</td>
+                </tr>
+                <tr>
+                    <th>Running:</th>
+                    <td>{{compare_member1_data["running_time"]}} Hour(s)</td>
+                    <td>{{compare_member1_data["running_cals"]}} Calorie(s)</td>
+                    <td>{{compare_member2_data["running_time"]}} Hour(s)</td>
+                    <td>{{compare_member2_data["running_cals"]}} Calorie(s)</td>
+                </tr>
+                <tr>
+                    <th>Cycling:</th>
+                    <td>{{compare_member1_data["cycling_time"]}} Hour(s)</td>
+                    <td>{{compare_member1_data["cycling_cals"]}} Calorie(s)</td>
+                    <td>{{compare_member2_data["cycling_time"]}} Hour(s)</td>
+                    <td>{{compare_member2_data["cycling_cals"]}} Calorie(s)</td>
+                </tr>
+                <tr>
+                    <th>Swimming:</th>
+                    <td>{{compare_member1_data["swimming_time"]}} Hour(s)</td>
+                    <td>{{compare_member1_data["swimming_cals"]}} Calorie(s)</td>
+                    <td>{{compare_member2_data["swimming_time"]}} Hour(s)</td>
+                    <td>{{compare_member2_data["swimming_cals"]}} Calorie(s)</td>
+                </tr>
+            </table>
+
+    </div><!-- .text-box -->
+  </div><!-- .col-md-12 -->
+</div><!-- .row -->
+{% endblock %}
