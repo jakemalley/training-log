@@ -35,6 +35,10 @@
                 </div>
             </div>
         </div>
+        <!-- If there is no exercise. -->
+        {% if exercise_total_year <= 0 %}
+            <p>It appears you don't have any exercise yet this year? Why not <a href="{{ url_for('exercise.index')}}">add</a> some?</p>
+        {% else %}
         <!-- General Dashboard -->
         <div class="row">
             <div class="col-md-4">
@@ -61,6 +65,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
     <!-- Script for Pie Chart -->
     <script>

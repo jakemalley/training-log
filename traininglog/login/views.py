@@ -114,8 +114,15 @@ def signup():
                 db.session.add(member)
                 db.session.commit()
 
+                # The ID of the new member.
+                new_id = Member.query.filter_by(email=user_signup_form.email.data).first().id
                 # Add the users weight to the weight table.
-                db.session.add(Weight(user_signup_form.weight.data, now, Member.query.filter_by(email=user_signup_form.email.data).first().id))
+                db.session.add(Weight(user_signup_form.weight.data, now, new_id))
+
+                # Add a welcome message.
+                db.session.add(Message(now,"Welcome to the training log! Important messages are displayed here. Click them to delete.", new_id))
+                
+                # Commit the changes.
                 db.session.commit()
 
                 # Redirect them to the dashboard. (Also log them in.)
@@ -294,7 +301,7 @@ def delete_message(message_id):
     else:
         flash("Cannot delete message.","error")
 
-    # Return to the dashboard.
-    return redirect(url_for('dashboard.dashboard'))
+    # Return to the previous page. (Or the dashboard if that is not possible.)
+    return redirect(request.referrer or url_for('dashboard.dashboard'))
 
 
