@@ -17,7 +17,7 @@ from traininglog import app
 def error_bad_request(error):
     """
     When the server cannot process the request.
-    i.e. it could not be understood by the server.
+    i.e. the request could not be understood by the server.
     """
 
     # Create a dictionary with the error and error message.
@@ -26,9 +26,9 @@ def error_bad_request(error):
     return render_template("error.html",error_dictionary=error_dictionary)
 
 @app.errorhandler(401)
-def error_page_not_found(error):
+def error_unauthorised(error):
     """
-    When the page isn't found render the error.html
+    When the user isn't unauthorised render the error.html
     page and display it to the user with the 401 message.
     """
 
@@ -38,10 +38,10 @@ def error_page_not_found(error):
     return render_template("error.html",error_dictionary=error_dictionary)
 
 @app.errorhandler(403)
-def error_page_not_found(error):
+def error_forbidden(error):
     """
-    When the page isn't found render the error.html
-    page and display it to the user with the 403 message.
+    When the user is forbidden to access the requested page
+    render the error.html page and display it to the user with the 403 message.
     """
 
     # Create a dictionary with the error and error message.
@@ -62,10 +62,10 @@ def error_page_not_found(error):
     return render_template("error.html",error_dictionary=error_dictionary)
 
 @app.errorhandler(500)
-def error_page_not_found(error):
+def error_internal_server_error(error):
     """
-    When the page isn't found render the error.html
-    page and display it to the user with the 500 message.
+    When the server encountered an internal server error render 
+    the error.html page and display it to the user with the 500 message.
     """
     
     # Create a dictionary with the error and error message.
