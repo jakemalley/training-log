@@ -34,7 +34,7 @@ class DevelopmentConfig(DefaultConfig):
     """
 
     # Warn the user so they know they're using the development config when running the server.
-    print("Warning using development configuration.")
+    print(" * Warning using development configuration.")
 
     # Enables debugging in development environments
     DEBUG = True

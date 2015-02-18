@@ -11,9 +11,18 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import LoginManager
+from os import environ
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
+
+# Get the configuration class to use from a environment variable.
+try:
+    app.config.from_object(environ['TRAINING_LOG_CONFIG'])
+except KeyError:
+    # The environment variable was not set.
+    # Assume we're in production.
+    app.config.from_object('config.ProductionConfig')
 
 # Create the login manager.
 login_manager = LoginManager()

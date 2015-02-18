@@ -13,15 +13,6 @@ to create custom commands.
 from flask.ext.script import Manager,Server
 from flask.ext.migrate import Migrate, MigrateCommand
 from traininglog import app, db
-from os import environ
-
-# Get the configuration class to use from a environment variable.
-try:
-    app.config.from_object(environ['TRAINING_LOG_CONFIG'])
-except KeyError:
-    # The environment variable was not set.
-    # Assume we're in production.
-    app.config.from_object('config.ProductionConfig')
 
 # Create the manager object.
 manager = Manager(app)
