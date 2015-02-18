@@ -7,7 +7,7 @@ Creates the flask app.
 """
 
 # Imports
-from flask import Flask, render_template, abort
+from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import LoginManager
