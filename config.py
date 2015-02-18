@@ -47,6 +47,9 @@ class ProductionConfig(DefaultConfig):
     # Explicitly make sure debugging is disabled.
     DEBUG = False
     
+    # Specify a absolute path for SQLite in /tmp
+    SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/training_log_database.db"
+
     # Set the host and port.
     HOST = '0.0.0.0'
     PORT = 8080
