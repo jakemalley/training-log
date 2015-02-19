@@ -202,6 +202,17 @@ class Exercise(db.Model):
         """
         return self.calories_burned
 
+    def update_duration(self, new_duration, new_calories_burned):
+        """
+        Updates the duration and calories_burned for an exercise event.
+        """
+
+        # Update the values.
+        self.calories_burned=new_calories_burned
+        self.exercise_duration=new_duration
+        # Commit the changes.
+        db.session.commit()
+
 class Member(db.Model):
 
     """

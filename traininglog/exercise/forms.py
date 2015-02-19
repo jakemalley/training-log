@@ -8,7 +8,7 @@ Defines the forms to be used regarding exercise data.
 
 # Imports 
 from flask_wtf import Form
-from wtforms import TextField, SelectField, DecimalField
+from wtforms import TextField, SelectField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, NumberRange
 
 class AddRunningForm(Form):
@@ -81,6 +81,25 @@ class AddSwimmingForm(Form):
         places=2,
         validators=[DataRequired(), NumberRange(min=0, max=24)]
     )
+
+class EditExerciseForm(Form):
+
+    """
+    Form for users to change the details about their exercise.
+    """
+
+    # Hidden field for the exercise id.
+    exercise_id = TextField('exercise_id')
+
+    # Decimal field for the new duration.
+    duration = DecimalField(
+        'duration',
+        places=2,
+        validators=[DataRequired(), NumberRange(min=0, max=24)]
+    )
+    # Check box field for users to delete the exercise.
+    delete = BooleanField('delete_exercise')
+
 
 class CompareMemberForm(Form):
 

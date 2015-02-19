@@ -35,6 +35,53 @@
                 </tr>
             </table>
 
+            {% if member == current_user %}
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editExerciseModal">Edit Exercise</button>
+
+            <!-- Edit Exercise Modal -->
+            <div class="modal fade" id="editExerciseModal" tabindex="-1" role="dialog" aria-labelledby="Edit Exercise" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Edit Exercise</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editExerciseForm" class="form-down" role="form" method="post" action="{{ url_for('exercise.edit_exercise') }}">
+                                {{ edit_exercise_form.csrf_token }}
+                                <p>
+                                Please amend the exercise details and click 'save changes' when done.
+                                </p>
+                                <!-- Hidden field for the exercise ID -->
+                                {{ edit_exercise_form.exercise_id(type="hidden",value=exercise.id) }}
+                                <p>
+                                    <label>Exercise:</label>
+                                    <input type="text" class="form-control" value="{{ exercise.get_exercise() }}" disabled>
+                                </p>
+                                <p>
+                                    <label>Calories Burned:</label>
+                                    <input type="text" class="form-control" value="{{ exercise.calories_burned }}" disabled>
+                                </p>
+                                <p>
+                                    <label>Duration:</label>
+                                    {{ edit_exercise_form.duration(class="form-control",value=exercise.exercise_duration) }}
+                                </p>
+                                <div class="alert alert-danger" role="alert">
+                                    <p> 
+                                        {{ edit_exercise_form.delete }} <label>Delete this exercise event.</label>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-blue" type="submit" onclick=" $('#editExerciseForm').submit();">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- editExerciseModal -->
+            {% endif %}
+
             <!-- All Exercise with single event. -->
             <div class="page-header">
                 <h1><br/><small>All Exercise</small></h1>

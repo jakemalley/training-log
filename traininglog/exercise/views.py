@@ -9,7 +9,7 @@ Define all of the routes for the exercise blueprint.
 from flask import flash, redirect, render_template, \
                 request, url_for, Blueprint
 from flask.ext.login import login_required, current_user
-from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm, CompareMemberForm
+from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm, CompareMemberForm, EditExerciseForm
 from traininglog.models import Member, Exercise, Weight, Message, RunningLookUp, CyclingLookUp, SwimmingLookUp
 from traininglog import db
 from datetime import datetime, date, timedelta
@@ -260,7 +260,11 @@ def view_exercise(exercise_id):
     Displays the event with the id = exercise_id
     """
     
+    # Get the exercise object with the given id.
     exercise = Exercise.query.filter_by(id=exercise_id).first()
+
+    # Create the edit exercise form.
+    edit_exercise_form = EditExerciseForm()
 
     if exercise.member != current_user:
         # If you are viewing another users exercise.
@@ -270,7 +274,45 @@ def view_exercise(exercise_id):
 
     all_exercise_data = Exercise.query.filter_by(member=exercise.member).order_by(Exercise.id.desc()).all()
 
-    return render_template('view.html',all_exercise_data=all_exercise_data,exercise=exercise,member=exercise.member)
+    return render_template('view.html',all_exercise_data=all_exercise_data,exercise=exercise,member=exercise.member,edit_exercise_form=edit_exercise_form)
+
+@exercise_blueprint.route('/edit_exercise', methods=['POST','GET'])
+@login_required
+def edit_exercise():
+    """
+    Allows users to edit their exercise.
+    """
+
+    # Create the edit exercise form.
+    edit_exercise_form = EditExerciseForm()
+
+    if request.method=='POST' and edit_exercise_form.validate_on_submit():
+        # The method was post and the form was valid.
+        # Get the exercise object.
+        exercise = Exercise.query.filter_by(id=edit_exercise_form.exercise_id.data).first()
+        # Check the exercise is for the current user.
+        if exercise.member == current_user:
+            # OK lets run the update.
+            # See if the want us to delete it.
+            if bool(edit_exercise_form.delete.data) == True:
+                # Delete that exercise.
+                db.session.delete(exercise)
+                db.session.commit()
+                flash("Exercise has been deleted.")
+                # Send back to all the exercise as this event won't exist anymore.
+                return redirect(url_for('exercise.view'))
+            else:
+                # Calculate the new calories burned.
+                # (We don't want to include the new weight in case they did this when the weight was different etc.
+                # we are only updating the duration and thus calories burned as only a result of this.)
+                new_calories_burned = (exercise.calories_burned/exercise.exercise_duration)*float(edit_exercise_form.duration.data) 
+                # Update the duration.
+                exercise.update_duration(float(edit_exercise_form.duration.data), new_calories_burned)
+                flash("Exercise has been updated.")
+                
+    # Send them back to where they came from.
+    return redirect(request.referrer)
+
 
 @exercise_blueprint.route('/compare',methods=['POST','GET'])
 @login_required
