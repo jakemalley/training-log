@@ -64,9 +64,13 @@ body {
 
 /* Form Down */
 .form-down{
-    max-width: 330px;
+    max-width: 800px
     padding: 15px;
     margin: 0 auto;
+}
+
+.form-down .row .col-md-6, .col-md-12{
+    padding-bottom: 10px;
 }
 .form-down .form-control:focus {
   z-index: 2;
