@@ -49,6 +49,7 @@ from traininglog.home.views import home_blueprint
 from traininglog.dashboard.views import dashboard_blueprint
 from traininglog.exercise.views import exercise_blueprint
 from traininglog.weight.views import weight_blueprint
+from traininglog.admin.views import admin_blueprint
 
 # Register the blueprints.
 app.register_blueprint(login_blueprint)
@@ -56,6 +57,7 @@ app.register_blueprint(home_blueprint)
 app.register_blueprint(dashboard_blueprint, url_prefix="/dashboard")
 app.register_blueprint(exercise_blueprint, url_prefix="/exercise")
 app.register_blueprint(weight_blueprint, url_prefix="/weight")
+app.register_blueprint(admin_blueprint, url_prefix="/admin")
 
 # Import the Member model.
 from traininglog.models import Member

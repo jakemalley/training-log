@@ -1,0 +1,48 @@
+<!-- Display admin dashboard page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}Admin{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li class="active">Admin</li>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12" style="padding-top:20px;">
+    <div class="text-box">
+        <div class="page-header">
+            <h1>Admin</h1>
+        </div>
+        <p>Parkwood Vale Harriers Admin Area.</p>
+
+        <table class="table table-hover">
+            <tr>
+                <th>Registered Users:</th>
+                <th>Total:</th>
+                <td>{{ stats["total_members"] }}</td>
+                <th>Active:</th>
+                <td>{{ stats["active_members"] }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <th>Firstname</th>
+                <th>Surname</th>
+                <th>E-Mail</th>
+                <th>Join Date</th>
+                <th>Last Login Date</th>
+            </tr>
+            {% for member in members %}
+            <tr>
+                <td><a href="{{ url_for('admin.view', member_id=member.get_id()) }}">{{ member.get_id() }}</a></td>
+                <td>{{ member.get_firstname() }}</td>
+                <td>{{ member.get_surname() }}</td>
+                <td>{{ member.get_email() }}</td>
+                <td>{{ member.get_join_date() }}</td>
+                <td>{{ member.get_last_login_date() }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div><!-- .text-box -->
+  </div><!-- .col-md-12 -->
+</div><!-- .row -->
+{% endblock %}

@@ -1,0 +1,152 @@
+<!-- Display admin dashboard page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}Admin{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li><a href="{{ url_for('admin.dashboard') }}">Admin</a></li>
+<li class="active">View Member</li>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12" style="padding-top:20px;">
+    <div class="text-box">
+        <div class="page-header">
+            <h1>View Member<br/>
+                <small>{{member.get_full_name()}} 
+                  {%if member.exercise_data %}
+                    <a href="{{url_for('exercise.view_exercise', exercise_id=member.exercise_data[0].id)}}">View Exercise</a>
+                  {% endif %}
+                </small>
+            </h1>
+        </div>
+          <!-- Errors from the editDetailsForm in the Modal. -->
+          {% for field, errors in admin_edit_form.errors.items() %}
+              <p><span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+              The {{ field }} field had the following error: {{ errors[0] }}</p>
+          {% endfor %}
+          <form class="form-horizontal" id="adminEditDetailsForm" method="POST" action="">
+            {{ admin_edit_form.csrf_token }}
+            {{ admin_edit_form.member_id(type="hidden",value=member.get_id()) }}
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Firstname</label>
+              <div class="col-sm-10">
+                {{ admin_edit_form.firstname(class="form-control",value=member.get_firstname()) }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Surname</label>
+              <div class="col-sm-10">
+                {{ admin_edit_form.surname(class="form-control",value=member.get_surname()) }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Email</label>
+              <div class="col-sm-10">
+                {{ admin_edit_form.email(class="form-control",value=member.get_email()) }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Weight</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" value="{{member.weight_data[-1].weight}} Kilograms" disabled="true">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Height</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" value="{{member.get_height()}} Meters" disabled="true">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Gender</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" value="{{member.get_gender()}}" disabled="true">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Address</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" value="{{member.get_address()}}" disabled="true">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Password</label>
+              <div class="col-sm-10">
+                {{ admin_edit_form.password(class="form-control") }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Confirm Password</label>
+              <div class="col-sm-10">
+                {{ admin_edit_form.confirm_password(class="form-control") }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Set Admin</label>
+              <div class="col-sm-10">
+                {% if member.is_admin %}
+                  {{ admin_edit_form.set_admin(checked="checked") }}
+                {%else %}
+                  {{ admin_edit_form.set_admin() }}
+                {%endif%}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Set Active</label>
+              <div class="col-sm-10">
+                {% if member.is_active %}
+                  {{ admin_edit_form.set_active(checked="checked") }}
+                {%else %}
+                  {{ admin_edit_form.set_active() }}
+                {%endif%}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Join Date</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" value="{{member.get_join_date()}}" disabled="true">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Last Login</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" value="{{member.get_last_login_date()}}" disabled="true">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+              {% if member == current_user %}
+                <button class="btn btn-default" disabled="true">Save Changes</button> 
+                <label>Cannot make changes to your own profile via the admin dashboard.</label>
+              {% else %}
+                <button type="button" class="btn btn-blue" data-toggle="modal" data-target="#confirmChanges">
+                  Save Changes
+                </button>
+              {% endif %}
+              </div>
+            </div>
+          </form>
+
+          <!-- Confirmation Modal -->
+          <div class="modal fade" id="confirmChanges" tabindex="-1" role="dialog" aria-labelledby="confirmChanges" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="confirmChanges">Confirm Changes</h4>
+                </div>
+                <div class="modal-body">
+                  Changing a member's details may result in them being unable to login and access their account. As well as damage to this system. Don't abuse your administrator privileges!
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button class="btn btn-danger" type="submit" onclick=" $('#adminEditDetailsForm').submit();">Confirm Changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+    </div><!-- .text-box -->
+  </div><!-- .col-md-12 -->
+</div><!-- .row -->
+{% endblock %}

@@ -71,6 +71,10 @@
                                 <li class="divider"></li>
                                 <li><a href="{{ url_for('login.myprofile')}}#change-password">Change Password</a></li>
                                 <li class="divider"></li>
+                                {% if current_user.is_admin %}
+                                    <li><a href="{{ url_for('admin.dashboard')}}">Admin Dashboard</a></li>
+                                    <li class="divider"></li>
+                                {% endif %}
                                 <li><a href="{{ url_for('login.logout')}}">Logout</a></li>
                             </ul>
                         </li>

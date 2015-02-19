@@ -21,7 +21,7 @@ class LoginForm(Form):
     email = TextField('email',validators=[DataRequired(),Email(message=None)])
     
     # Password field for the users password.
-    password = PasswordField('password',validators=[DataRequired(),Length(min=6,max=32)])
+    password = PasswordField('password',validators=[DataRequired(),Length(max=32)])
 
     # Remember Me field.
     remember = BooleanField('remember me')
