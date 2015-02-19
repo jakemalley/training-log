@@ -19,6 +19,7 @@ home_blueprint = Blueprint(
 
 # Define the routes.
 @home_blueprint.route('/')
+@home_blueprint.route('/None') # Added /None as when there is a redirect error using request.referrer
 def index():
     """
     If the user is logged in redirects to 
