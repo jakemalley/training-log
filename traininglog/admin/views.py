@@ -66,8 +66,11 @@ def view(member_id):
         member.firstname = admin_edit_form.firstname.data
         member.surname = admin_edit_form.surname.data
         member.email = admin_edit_form.email.data
-        member.is_account_active = int(admin_edit_form.set_active.data)
+        member.set_active_status(int(admin_edit_form.set_active.data))
         member.is_admin = int(admin_edit_form.set_admin.data)
+
+        print("STOP")
+        print(int(admin_edit_form.set_active.data))
 
         # If the password was changed.
         if admin_edit_form.password.data:

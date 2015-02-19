@@ -94,7 +94,7 @@
             <div class="form-group">
               <label class="col-sm-2 control-label">Set Active</label>
               <div class="col-sm-10">
-                {% if member.is_active %}
+                {% if member.account_is_active %}
                   {{ admin_edit_form.set_active(checked="checked") }}
                 {%else %}
                   {{ admin_edit_form.set_active() }}

@@ -283,7 +283,15 @@ class Member(db.Model):
         """
         Returns true if the account has admin privileges.
         """
-        return bool(self.is_admin)        
+        return bool(self.is_admin)   
+
+    def set_active_status(self, status=1):
+        """
+        Sets the status of the account.
+        1 = active
+        0 = deactivate
+        """
+        self.account_is_active=status  
 
     # Get Methods.
     def get_id(self):
