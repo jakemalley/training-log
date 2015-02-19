@@ -67,7 +67,7 @@
         </div>
         {% endif %}
 
-    <!-- Script for Pie Chart -->
+    <!-- Script for Charts -->
     <script>
         var lineChartData = {
                 labels : {{line_chart_labels|safe}},
@@ -85,7 +85,7 @@
                 ]
 
             }
-
+        var pieData = {{pie_chart_data|safe}}
         window.onload = function(){
             var ctx = document.getElementById("line_canvas").getContext("2d");
             window.myLine = new Chart(ctx).Line(lineChartData, {
@@ -94,8 +94,6 @@
             var ctx = document.getElementById("pie-chart").getContext("2d");
                 window.myPie = new Chart(ctx).Pie(pieData);
         }
-        var pieData = {{pie_chart_data|safe}}
-
     </script>
     </div><!-- .text-box -->
   </div><!-- .col-md-12 -->

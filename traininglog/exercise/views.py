@@ -373,7 +373,18 @@ def compare():
                                     "swimming_cals":get_cals_swimming(member=compare_member2),
                                     }
 
-            return render_template('compare.html',compare_member_1_data=compare_member_1_data,compare_member_2_data=compare_member_2_data, compare_form=compare_form)
+            # Get most recent exercise for the charts
+            compare_member_1_exercise = Exercise.query.filter_by(member=compare_member1).order_by(Exercise.id.desc()).limit(5).all()
+            compare_member_2_exercise = Exercise.query.filter_by(member=compare_member2).order_by(Exercise.id.desc()).limit(5).all()
+
+            # Chart data for time
+            chart_data_time_1 = [ exercise.exercise_duration for exercise in compare_member_1_exercise][::-1]
+            chart_data_time_2 = [ exercise.exercise_duration for exercise in compare_member_2_exercise][::-1]
+            # Chart data for calories
+            chart_data_calories_1 = [ exercise.calories_burned for exercise in compare_member_1_exercise][::-1]
+            chart_data_calories_2 = [ exercise.calories_burned for exercise in compare_member_2_exercise][::-1]
+
+            return render_template('compare.html',compare_member_1_data=compare_member_1_data,compare_member_2_data=compare_member_2_data, compare_form=compare_form,chart_data_time_1=chart_data_time_1,chart_data_time_2=chart_data_time_2,chart_data_calories_1=chart_data_calories_1,chart_data_calories_2=chart_data_calories_2)
     
     return render_template('compare.html', compare_form=compare_form)
 

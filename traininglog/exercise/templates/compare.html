@@ -12,34 +12,34 @@
     <div class="text-box">
         <a href="{{ url_for('exercise.index') }}">Back</a>
 
-            <!-- Display compare form if there is not data (i.e. the request was GET.) -->
-            <div class="page-header">
-                <h1><small>Compare Members</small></h1>
-                <p>You can use this form to compare the all time performance of two members.</p>
+        <!-- Display compare form if there is not data (i.e. the request was GET.) -->
+        <div class="page-header">
+            <h1><small>Compare Members</small></h1>
+            <p>You can use this form to compare the all time performance of two members.</p>
+        </div>
+        <form role="form" class="form-inline" method="post" action="{{ url_for('exercise.compare') }}">
+            {{ compare_form.csrf_token }}
+            <div class="form-group" style="margin-right:5px;">
+                <label>Member 1</label>
+                {{ compare_form.compare_member_1(class="form-control") }}
+                {% for error in compare_form.compare_member_1.errors %}
+                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                    {{ error }}
+                {% endfor %}
             </div>
-            <form role="form" class="form-inline" method="post" action="{{ url_for('exercise.compare') }}">
-                {{ compare_form.csrf_token }}
-                <div class="form-group" style="margin-right:5px;">
-                    <label>Member 1</label>
-                    {{ compare_form.compare_member_1(class="form-control") }}
-                    {% for error in compare_form.compare_member_1.errors %}
-                        <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
-                        {{ error }}
-                    {% endfor %}
-                </div>
-                <div class="form-group" style="margin-left:5px;">
-                    <label>Against Member 2</label>
-                    {{ compare_form.compare_member_2(class="form-control") }}
-                    {% for error in compare_form.compare_member_2.errors %}
-                        <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
-                        {{ error }}
-                    {% endfor %}
-                </div>
-                <button class="btn btn-blue" type="submit">Compare Members</button>
-            </form>
+            <div class="form-group" style="margin-left:5px;">
+                <label>Against Member 2</label>
+                {{ compare_form.compare_member_2(class="form-control") }}
+                {% for error in compare_form.compare_member_2.errors %}
+                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                    {{ error }}
+                {% endfor %}
+            </div>
+            <button class="btn btn-blue" type="submit">Compare Members</button>
+        </form>
 
 
-            {% if compare_member_1_data and compare_member_2_data %}
+        {% if compare_member_1_data and compare_member_2_data %}
             <div class="page-header">
                 <h1>Compare All Exercise</h1>
             </div>
@@ -89,8 +89,96 @@
                     <td>{{compare_member_2_data["swimming_cals"]}} Calorie(s)</td>
                 </tr>
             </table>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <label>Legend:</label>
+                    Member 1: <label style="color:#dcdcdc">{{compare_member_1_data["name"]}}</label>
+                    Member 2: <label style="color:#97bbcd">{{compare_member_2_data["name"]}}</label>
+                </div>
+            </div>        
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- The line chart for time -->
+                    <label>Line chart for comparing hours exercised.</label>
+                    <canvas id="line_canvas_time" height="200" width="200"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <!-- The line chart for calories -->
+                    <label>Line chart for comparing calories burned.</label>
+                    <canvas id="line_canvas_calories" height="200" width="200"></canvas>
+                </div>
+            </div>
 
-            {% endif %}
+        {% endif %}
+
+        <!-- Script for Charts -->
+        <script>
+            var lineChartDataTime = {
+                    labels : ['','','','',''],
+                    datasets : [
+                        {
+                            label: "Member 1",
+                            fillColor : "rgba(220,220,220,0.2)",
+                            strokeColor : "rgba(220,220,220,1)",
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(220,220,220,1)",
+                            data : {{ chart_data_time_1|safe }}
+                        },
+                        {
+                            label: "Member 2",
+                            fillColor : "rgba(151,187,205,0.2)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(151,187,205,1)",
+                            data : {{ chart_data_time_2|safe }}
+                        }
+                    ]
+
+                }
+
+            var lineChartDataCalories = {
+                    labels : ['','','','',''],
+                    datasets : [
+                        {
+                            label: "Member 1",
+                            fillColor : "rgba(220,220,220,0.2)",
+                            strokeColor : "rgba(220,220,220,1)",
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(220,220,220,1)",
+                            data : {{ chart_data_calories_1|safe }}
+                        },
+                        {
+                            label: "Member 2",
+                            fillColor : "rgba(151,187,205,0.2)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            pointHighlightFill : "#fff",
+                            pointHighlightStroke : "rgba(151,187,205,1)",
+                            data : {{ chart_data_calories_2|safe }}
+                        }
+                    ]
+
+                }
+            
+            window.onload = function(){
+                var ctx = document.getElementById("line_canvas_time").getContext("2d");
+                window.myLine = new Chart(ctx).Line(lineChartDataTime, {
+                    responsive: true
+                });
+                var ctx = document.getElementById("line_canvas_calories").getContext("2d");
+                window.myLine = new Chart(ctx).Line(lineChartDataCalories, {
+                    responsive: true
+                });
+            }
+        </script>
 
     </div><!-- .text-box -->
   </div><!-- .col-md-12 -->
