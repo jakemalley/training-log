@@ -9,7 +9,7 @@ Define all of the routes for the exercise blueprint.
 from flask import flash, redirect, render_template, \
                 request, url_for, Blueprint
 from flask.ext.login import login_required, current_user
-from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm
+from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm, CompareMemberForm
 from traininglog.models import Member, Exercise, Weight, Message, RunningLookUp, CyclingLookUp, SwimmingLookUp
 from traininglog import db
 from datetime import datetime, date, timedelta
@@ -39,7 +39,17 @@ def index():
     # Get all the exercise data.
     exercise_data = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).limit(10).all()
 
-    return render_template('index.html', add_running_form=add_running_form, add_swimming_form=add_swimming_form, add_cycling_form=add_cycling_form, exercise_data=exercise_data)
+    # Get all the current members.
+    members = Member.query.all()
+    # Create the choices list for the compare form.
+    choices = [(member.get_id(), member.get_full_name()) for member in members]
+
+    # Create the form.
+    compare_form = CompareMemberForm()
+    compare_form.compare_member_1.choices = choices
+    compare_form.compare_member_2.choices = choices
+
+    return render_template('index.html', add_running_form=add_running_form, add_swimming_form=add_swimming_form, add_cycling_form=add_cycling_form, exercise_data=exercise_data,compare_form=compare_form)
 
 @exercise_blueprint.route('/add_running', methods=['GET','POST'])
 @login_required
@@ -262,43 +272,64 @@ def view_exercise(exercise_id):
 
     return render_template('view.html',all_exercise_data=all_exercise_data,exercise=exercise,member=exercise.member)
 
-@exercise_blueprint.route('/compare/<member_id>')
+@exercise_blueprint.route('/compare',methods=['POST','GET'])
 @login_required
-def compare(member_id):
+def compare():
     """
     Page to compare to users.
     """
 
-    compare_member1 = current_user
-    compare_member2 = Member.query.filter_by(id=member_id).first()
+    compare_form = CompareMemberForm()
 
-    # Get todays date.
-    now = datetime.utcnow()
+    # Get all the current members.
+    members = Member.query.all()
+    # Create the choices list for the compare form.
+    choices = [(member.get_id(), member.get_full_name()+' (id='+str(member.get_id())+')') for member in members]
+    # Create the form.
+    compare_form = CompareMemberForm()
+    compare_form.compare_member_1.choices = choices
+    compare_form.compare_member_2.choices = choices
 
-    compare_member1_data = {
-                            "name":compare_member1.get_full_name(),
-                            "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member1),
-                            "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member1),
-                            "running_time":get_hours_running(member=compare_member1),
-                            "running_cals":get_cals_running(member=compare_member1),
-                            "cycling_time":get_hours_cycling(member=compare_member1),
-                            "cycling_cals":get_cals_cycling(member=compare_member1),
-                            "swimming_time":get_hours_swimming(member=compare_member1),
-                            "swimming_cals":get_cals_swimming(member=compare_member1),
-                            }
-    compare_member2_data = {
-                            "name":compare_member2.get_full_name(),
-                            "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member2),
-                            "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member2),
-                            "running_time":get_hours_running(member=compare_member2),
-                            "running_cals":get_cals_running(member=compare_member2),
-                            "cycling_time":get_hours_cycling(member=compare_member2),
-                            "cycling_cals":get_cals_cycling(member=compare_member2),
-                            "swimming_time":get_hours_swimming(member=compare_member2),
-                            "swimming_cals":get_cals_swimming(member=compare_member2),
-                            }
+    # Make sure the method was post.
+    if request.method == 'POST':
+        # Validate the form.
+        if compare_form.validate_on_submit():
+            # Get data from the compare form.
 
-    return render_template('compare.html',compare_member1_data=compare_member1_data,compare_member2_data=compare_member2_data)
+            compare_member1 = Member.query.filter_by(id=compare_form.compare_member_1.data).first()
+            compare_member2 = Member.query.filter_by(id=compare_form.compare_member_2.data).first()
+
+            # Get todays date.
+            now = datetime.utcnow()
+
+            compare_member_1_data = {
+                                    "name":compare_member1.get_full_name(),
+                                    "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member1),
+                                    "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member1),
+                                    "running_time":get_hours_running(member=compare_member1),
+                                    "running_cals":get_cals_running(member=compare_member1),
+                                    "cycling_time":get_hours_cycling(member=compare_member1),
+                                    "cycling_cals":get_cals_cycling(member=compare_member1),
+                                    "swimming_time":get_hours_swimming(member=compare_member1),
+                                    "swimming_cals":get_cals_swimming(member=compare_member1),
+                                    }
+            compare_member_2_data = {
+                                    "name":compare_member2.get_full_name(),
+                                    "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member2),
+                                    "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member2),
+                                    "running_time":get_hours_running(member=compare_member2),
+                                    "running_cals":get_cals_running(member=compare_member2),
+                                    "cycling_time":get_hours_cycling(member=compare_member2),
+                                    "cycling_cals":get_cals_cycling(member=compare_member2),
+                                    "swimming_time":get_hours_swimming(member=compare_member2),
+                                    "swimming_cals":get_cals_swimming(member=compare_member2),
+                                    }
+
+            return render_template('compare.html',compare_member_1_data=compare_member_1_data,compare_member_2_data=compare_member_2_data, compare_form=compare_form)
+    
+    return render_template('compare.html', compare_form=compare_form)
+
+    
 
 @exercise_blueprint.route('/picktheteam')
 @login_required

@@ -81,3 +81,13 @@ class AddSwimmingForm(Form):
         places=2,
         validators=[DataRequired(), NumberRange(min=0, max=24)]
     )
+
+class CompareMemberForm(Form):
+
+    """
+    Form for users to select other 
+    member to compare with.
+    """
+
+    compare_member_1 = SelectField('compare_member_1')
+    compare_member_2 = SelectField('compare_member_2')

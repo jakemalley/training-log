@@ -11,7 +11,10 @@
     <div class="text-box">
         <a href="{{ url_for('dashboard.dashboard') }}">Back</a>
         <div class="page-header">
-            <h1>Add Exercise</h1>
+            <h1>My Exercise
+                <small>Add Exercise</small>
+            </h1>
+            <p>Here you can add new exercise events.</p>
         </div>
         <!-- Forms -->
         <div class="row">
@@ -29,9 +32,37 @@
                 {% include 'add_cycling_form.html' %}
             </div>
         </div>
+
+        <!-- Display compare form -->
+        <div class="page-header">
+            <h1><small>Compare Members</small></h1>
+            <p>You can use this form to compare the all time performance of two members.</p>
+        </div>
+        <form role="form" class="form-inline" method="post" action="{{ url_for('exercise.compare') }}">
+            {{ compare_form.csrf_token }}
+            <div class="form-group" style="margin-right:5px;">
+                <label>Compare Member 1</label>
+                {{ compare_form.compare_member_1(class="form-control") }}
+                {% for error in compare_form.compare_member_1.errors %}
+                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                    {{ error }}
+                {% endfor %}
+            </div>
+            <div class="form-group" style="margin-left:5px;">
+                <label>Compare Member 2</label>
+                {{ compare_form.compare_member_2(class="form-control") }}
+                {% for error in compare_form.compare_member_2.errors %}
+                    <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                    {{ error }}
+                {% endfor %}
+            </div>
+            <button class="btn btn-blue" type="submit">Compare Members</button>
+        </form>
+
         <!-- Display recent exercise -->
         <div class="page-header">
             <h1><small>Recent Exercise</small></h1>
+            <p>Here are your last ten exercise events.</p>
         </div>
         
         <!-- Show the last 3 entries -->
