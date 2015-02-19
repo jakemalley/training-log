@@ -65,7 +65,7 @@
       </p>
 
       <p>
-        {{ user_signup_form.height(class="form-control",placeholder="Height") }}
+        {{ user_signup_form.height(class="form-control",placeholder="Height (in Meters)") }}
         {% for error in user_signup_form.height.errors %}
           <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
           {{ error }}
@@ -73,7 +73,7 @@
       </p>
 
       <p>
-        {{ user_signup_form.weight(class="form-control",placeholder="Weight") }}
+        {{ user_signup_form.weight(class="form-control",placeholder="Weight (in Kilograms)") }}
         {% for error in user_signup_form.weight.errors %}
           <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
           {{ error }}

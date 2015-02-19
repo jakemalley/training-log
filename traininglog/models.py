@@ -243,7 +243,7 @@ class Member(db.Model):
         self.height=height
         self.address_line_1=address_line_1.lower()
         self.city=city.lower()
-        self.postcode=postcode.upper()
+        self.postcode=postcode.upper().replace(" ","")
         self.join_date=join_date
         self.last_login_date=last_login_date
         self.is_admin=is_admin

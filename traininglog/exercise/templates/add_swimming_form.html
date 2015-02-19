@@ -10,7 +10,7 @@
         {% endfor %}
     </div>
     <div class="form-group">
-        {{ add_swimming_form.duration(class="form-control",placeholder="Duration") }}
+        {{ add_swimming_form.duration(class="form-control",placeholder="Duration  (in Hours)") }}
         {% for error in add_swimming_form.duration.errors %}
             <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
             {{ error }}
