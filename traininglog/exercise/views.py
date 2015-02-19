@@ -7,7 +7,7 @@ Define all of the routes for the exercise blueprint.
 """
 
 from flask import flash, redirect, render_template, \
-                request, url_for, Blueprint
+                request, url_for, Blueprint, abort
 from flask.ext.login import login_required, current_user
 from forms import AddRunningForm, AddCyclingForm, AddSwimmingForm, CompareMemberForm, EditExerciseForm
 from traininglog.models import Member, Exercise, Weight, Message, RunningLookUp, CyclingLookUp, SwimmingLookUp
@@ -263,16 +263,22 @@ def view_exercise(exercise_id):
     # Get the exercise object with the given id.
     exercise = Exercise.query.filter_by(id=exercise_id).first()
 
-    # Create the edit exercise form.
-    edit_exercise_form = EditExerciseForm()
+    if exercise is not None:
 
-    if exercise.member != current_user:
-        # If you are viewing another users exercise.
-        db.session.add(Message(datetime.utcnow(), current_user.get_full_name()+" Viewed your exercise", exercise.member.get_id()))
-        # Commit the changes.
-        db.session.commit()
+        # Create the edit exercise form.
+        edit_exercise_form = EditExerciseForm()
 
-    all_exercise_data = Exercise.query.filter_by(member=exercise.member).order_by(Exercise.id.desc()).all()
+        if exercise.member != current_user:
+            # If you are viewing another users exercise.
+            db.session.add(Message(datetime.utcnow(), current_user.get_full_name()+" Viewed your exercise", exercise.member.get_id()))
+            # Commit the changes.
+            db.session.commit()
+
+        all_exercise_data = Exercise.query.filter_by(member=exercise.member).order_by(Exercise.id.desc()).all()
+
+    else:
+        # The exercise ID is invalid abort with HTTP 404
+        abort(404)
 
     return render_template('view.html',all_exercise_data=all_exercise_data,exercise=exercise,member=exercise.member,edit_exercise_form=edit_exercise_form)
 
