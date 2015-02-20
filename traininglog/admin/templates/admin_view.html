@@ -113,19 +113,29 @@
                 <input type="text" class="form-control" value="{{member.get_last_login_date()}}" disabled="true">
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-              {% if member == current_user %}
-                <button class="btn btn-default" disabled="true">Save Changes</button> 
-                <label>Cannot make changes to your own profile via the admin dashboard.</label>
-              {% else %}
-                <button type="button" class="btn btn-blue" data-toggle="modal" data-target="#confirmChanges">
-                  Save Changes
-                </button>
-              {% endif %}
-              </div>
-            </div>
-          </form>
+			<div class="form-group">	
+				<div class="col-sm-10 col-sm-offset-2">
+					<div class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+						<strong>Delete Account</strong>
+						{{ admin_edit_form.delete_user() }}
+						These actions cannot be undone.
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+				{% if member == current_user %}
+					<button class="btn btn-default" disabled="true">Save Changes</button> 
+					<label>Cannot make changes to your own profile via the admin dashboard.</label>
+				{% else %}
+					<button type="button" class="btn btn-blue" data-toggle="modal" data-target="#confirmChanges">
+						Save Changes
+					</button>
+				{% endif %}
+				</div>
+			</div>
+		</form>
 
           <!-- Confirmation Modal -->
           <div class="modal fade" id="confirmChanges" tabindex="-1" role="dialog" aria-labelledby="confirmChanges" aria-hidden="true">

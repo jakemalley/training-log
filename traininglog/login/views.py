@@ -291,15 +291,21 @@ def delete_message(message_id):
     Deletes the message with the id.
     """
 
-    # Query for the message.
-    msg = Message.query.filter_by(member=current_user, id=message_id).first()
-    # If the message exists.
-    if msg is not None:
-        db.session.delete(msg)
-        db.session.commit()
-        flash("Message Deleted")
+    # If we need to delete all the messages.
+    if int(message_id) == 0:
+        messages = Message.query.filter_by(member=current_user).all() 
     else:
-        flash("Cannot delete message.","error")
+        # Query for the message.
+        messages = Message.query.filter_by(member=current_user, id=message_id).all()
+    
+    for msg in messages:
+        # If the message exists.
+        if msg is not None:
+            db.session.delete(msg)
+            db.session.commit()
+            flash("Message Deleted")
+        else:
+            flash("Cannot delete message.","error")
 
     # Return to the previous page. (Or the dashboard if that is not possible.)
     return redirect(request.referrer or url_for('dashboard.dashboard'))

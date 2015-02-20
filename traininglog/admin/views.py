@@ -10,7 +10,7 @@ from flask import redirect, render_template, \
                 request, url_for, Blueprint, abort, flash
 from flask.ext.login import fresh_login_required, current_user
 from traininglog import db
-from traininglog.models import Member
+from traininglog.models import Member, Exercise
 from forms import AdminEditDetailsForm
 from functools import wraps
 from datetime import datetime
@@ -61,26 +61,50 @@ def view(member_id):
     # If the method was post and the form was valid.
     if request.method == 'POST' and admin_edit_form.validate_on_submit():
         # Change the data.
+
         # Get the member with that ID.
         member = Member.query.filter_by(id=admin_edit_form.member_id.data).first()
-        member.firstname = admin_edit_form.firstname.data
-        member.surname = admin_edit_form.surname.data
-        member.email = admin_edit_form.email.data
-        member.set_active_status(int(admin_edit_form.set_active.data))
-        member.is_admin = int(admin_edit_form.set_admin.data)
 
-        print("STOP")
-        print(int(admin_edit_form.set_active.data))
+        # See if the account was marked to be delete as then we don't need to update the details as well.
+        if bool(admin_edit_form.delete_user.data) == True:
+            # Delete the user.
+            
+            # Get their exercise data. 
+            exercise_data = Exercise.query.filter_by(member=member).all()
+            # For each piece of data.
+            for data in exercise_data:
+                # Delete the data.
+                db.session.delete(data)
 
-        # If the password was changed.
-        if admin_edit_form.password.data:
-            # Update the password.
-            member.update_password(admin_edit_form.password.data)
+            # Finally delete the user.
+            db.session.delete(member)
+            # And commit the changes
+            db.session.commit()
+
+            # Flash a message.
+            flash('Account has been delete!')
+
+            # Redirect to the admin dashboard sicne that user doesn't exist anymore.
+            return redirect(url_for('admin.dashboard'))
+
+        else:
+            # User was not marked as deleted, update their details.
+            member.firstname = admin_edit_form.firstname.data
+            member.surname = admin_edit_form.surname.data
+            member.email = admin_edit_form.email.data
+            member.set_active_status(int(admin_edit_form.set_active.data))
+            member.is_admin = int(admin_edit_form.set_admin.data)
+
+            # If the password was changed.
+            if admin_edit_form.password.data:
+                # Update the password.
+                member.update_password(admin_edit_form.password.data)
+
+            # Flash a success message.
+            flash("Details have been updated. Please inform the member of the changes.")
 
         # Commit the changes.
         db.session.commit()
-        # Flash a success message.
-        flash("Details have been updated. Please inform the member of the changes.")
 
         # Refresh the page
         return render_template('admin_view.html', member=member, admin_edit_form=admin_edit_form)

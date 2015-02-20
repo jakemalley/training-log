@@ -39,13 +39,16 @@
                             <ul class="dropdown-menu" role="menu">
                                 {% for msg in current_user.message_data[::-1] %}
                                     <li>
-                                        <a href="{{url_for('login.delete_message',message_id=msg.id)}}">
-                                            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
-                                            {{msg.get_message()}}
-                                        </a>
+										<a href="{{url_for('login.delete_message',message_id=msg.id)}}">
+											<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+											{{msg.get_message()}}
+										</a>
                                     </li>
                                     <li class="divider"></li>
                                 {% endfor %}
+								<li>
+									<a href="{{url_for('login.delete_message', message_id=0)}}">Delete All Messages</a>	
+								</li>
                             </ul>
                         </li>
                         {% endif %}

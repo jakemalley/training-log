@@ -48,3 +48,5 @@ class AdminEditDetailsForm(Form):
     set_admin = BooleanField('admin')
     # Boolean Field for setting active
     set_active = BooleanField('admin')
+    # Boolean Field for deleting the user.
+    delete_user = BooleanField('delete_user')
