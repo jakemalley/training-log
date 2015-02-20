@@ -11,6 +11,8 @@ from flask_wtf import Form
 from wtforms import TextField, SelectField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, NumberRange
 
+# DataRequired validator makes sure the data is present in the field.
+# NumberRange makes sure the data is between a specific number range.
 class AddRunningForm(Form):
 
     """

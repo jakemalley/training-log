@@ -11,6 +11,12 @@ from flask_wtf import Form
 from wtforms import TextField, TextAreaField, PasswordField, SelectField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, NumberRange
 
+# DataRequired validator makes sure the data is present in the field.
+# Length validator makes sure the field is between a specific lenght
+# EqualTo validator makes sure the field is equal to another field.
+# Email validator makes sure the field is a valid email.  
+# NumberRange makes sure the data is between a specific number range.
+
 class LoginForm(Form):
 
     """

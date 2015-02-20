@@ -13,7 +13,7 @@ ProductionConfig and DevelopmentConfig respectively.
 
 class DefaultConfig(object):
     """
-    Default configuration settings all other
+    Default configuration settings. All other
     configuration class should inherit from this class.
     """
 
@@ -51,5 +51,6 @@ class ProductionConfig(DefaultConfig):
     SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/training_log_database.db"
 
     # Set the host and port.
+	# (Only used when running the app via manage.py)
     HOST = '0.0.0.0'
     PORT = 8080

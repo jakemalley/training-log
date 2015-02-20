@@ -11,6 +11,11 @@ from flask_wtf import Form
 from wtforms import TextField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
 
+# DataRequired validator makes sure the data is present in the field.
+# Length validator makes sure the field is between a specific lenght
+# EqualTo validator makes sure the field is equal to another field.
+# Email validator makes sure the field is a valid email.
+
 class AdminEditDetailsForm(Form):
     """
     Form for admins to edit personal details.

@@ -63,6 +63,8 @@ def init_db():
     db.session.commit()
 
     # Generate the look up tables.
+	# As per the data for caloried_burned per hour for someone 
+	# of weight 80KG (Data given on the task sheet.)
     db.session.add(RunningLookUp(1, 472))
     db.session.add(RunningLookUp(2, 590))
     db.session.add(RunningLookUp(3, 679))

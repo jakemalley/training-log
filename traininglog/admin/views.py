@@ -22,6 +22,7 @@ admin_blueprint = Blueprint(
     )
 
 # Admin Required - Only allows members with is_admin = 1 access these views.
+# Allows me to use the decorator @admin_required.
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -116,8 +117,10 @@ def view(member_id):
 
         # If that member exists.
         if member is not None:
+			# Render the template passing in the member and form.
             return render_template('admin_view.html', member=member, admin_edit_form=admin_edit_form)
         else:
+			# Raise a HTTP 404 error.
             abort(404)
 
 
