@@ -24,7 +24,7 @@ login_blueprint = Blueprint(
 @login_blueprint.route('/login', methods=['GET','POST'])
 def login():
     """
-    Renders the login.html template and displays it the user.
+    Renders the login_login.html template and displays it the user.
     """
 
     # Create an empty error variable.
@@ -68,13 +68,13 @@ def login():
                 # Either the user does not exist or the password doesn't match.
                 # Error message left vague for security.
                 error="Invalid Credentials, Please try again."
-    # Display the login.html page to the user.
-    return render_template('login.html',user_login_form=user_login_form, error=error)
+    # Display the login_login.html page to the user.
+    return render_template('login_login.html',user_login_form=user_login_form, error=error)
 
 @login_blueprint.route('/signup', methods=['GET','POST'])
 def signup():
     """
-    Renders the signup.html template and displays it to the user.
+    Renders the login_signup.html template and displays it to the user.
     """
 
     # Create an empty error variable.
@@ -142,9 +142,9 @@ def signup():
             else:
                 error = "An account is already associated with this email address."
         else:
-            render_template('signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
+            render_template('login_signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
 
-    return render_template('signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
+    return render_template('login_signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
 
 @login_blueprint.route('/logout')
 @login_required
@@ -182,8 +182,8 @@ def myprofile():
             else:
                 error = "Incorrect Password, changes have not been made."
         else:
-            render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
-    return render_template('myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
+            render_template('login_myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
+    return render_template('login_myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
 
 @login_blueprint.route('/chgpasswd', methods=['POST','GET'])
 @fresh_login_required
@@ -218,7 +218,7 @@ def chgpasswd():
         else:
             flash("Invalid password password has not been changed",'error')
     
-    return render_template('myprofile.html',error=error, user_edit_details_form=EditDetailsForm(), user_change_password_form=user_change_password_form)
+    return render_template('login_myprofile.html',error=error, user_edit_details_form=EditDetailsForm(), user_change_password_form=user_change_password_form)
 
 @login_blueprint.route('/deleteaccount', methods=['POST','GET'])
 @fresh_login_required

@@ -40,7 +40,7 @@ def index():
     chart_data = [data.get_weight() for data in limit_weight_data][::-1]
     label_data = [data.get_date_str() for data in limit_weight_data][::-1]
 
-    return render_template('view_weight.html', add_weight_form=AddWeightForm(), weight_data=all_weight_data,chart_data=chart_data,label_data=label_data)
+    return render_template('weight_view_weight.html', add_weight_form=AddWeightForm(), weight_data=all_weight_data,chart_data=chart_data,label_data=label_data)
 
 @weight_blueprint.route('/add',methods=['GET','POST'])
 @login_required
@@ -74,6 +74,6 @@ def add_weight():
             # If it was successful redirect them to the index page.
             return redirect(url_for('weight.index'))
 
-    return render_template('add_weight.html', add_weight_form=add_weight_form)
+    return render_template('weight_add_weight.html', add_weight_form=add_weight_form)
 
 

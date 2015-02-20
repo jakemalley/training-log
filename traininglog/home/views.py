@@ -37,4 +37,4 @@ def welcome():
     Renders the welcome.html template and displays it the user.
     """
 
-    return render_template('welcome.html',user_login_form=LoginForm())
+    return render_template('home_welcome.html',user_login_form=LoginForm())

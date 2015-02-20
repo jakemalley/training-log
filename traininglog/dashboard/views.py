@@ -62,4 +62,4 @@ def dashboard():
     progress_today_width = int(float(exercise_total_today/4)*100)
     progress_year_width = int(float(exercise_total_today/1460)*100)
 
-    return render_template('dashboard.html',pie_chart_data=pie_chart_data, exercise_data=exercise_data,line_chart_data=line_chart_data,line_chart_labels=line_chart_labels,exercise_total_year=exercise_total_year,exercise_total_today=exercise_total_today,progress_today_width=progress_today_width,progress_year_width=progress_year_width)
+    return render_template('dashboard_dashboard.html',pie_chart_data=pie_chart_data, exercise_data=exercise_data,line_chart_data=line_chart_data,line_chart_labels=line_chart_labels,exercise_total_year=exercise_total_year,exercise_total_today=exercise_total_today,progress_today_width=progress_today_width,progress_year_width=progress_year_width)
