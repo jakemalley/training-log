@@ -47,7 +47,7 @@
                 </tr>
                 <tr>
                     <td>{{current_user.get_height()}} Meters</td>
-                    <td>{{current_user.weight_data[-1].weight}} Kilograms</td>
+                    <td>{% if current_user.weight_data %}{{current_user.weight_data[-1].weight}} Kilograms{% else %}No weight data could be found.{%endif %}</td>
                 </tr>
                 <tr>
                     <th>Address</th>
