@@ -33,7 +33,11 @@
             {{ error }}
           </p>
         {% endfor %}
-        <p>{{ user_login_form.remember }} Remember Me</p>
+        <p>
+          <div class="checkbox">
+            <label>{{ user_login_form.remember }} Remember Me </label>
+          </div>
+        </p>
         
       <button class="form-control btn btn-sm btn-blue" type="submit">Sign in</button>
     </form>
