@@ -67,9 +67,10 @@
                                     {{ edit_exercise_form.duration(class="form-control",value=exercise.exercise_duration) }}
                                 </p>
                                 <div class="alert alert-danger" role="alert">
-                                    <p> 
-                                        {{ edit_exercise_form.delete }} <label>Delete this exercise event.</label>
-                                    </p>
+                                    <div class="checkbox">
+                                        <label>{{ edit_exercise_form.delete }}</label>
+                                        <strong>Delete this exercise event.</strong>
+                                    </div>
                                 </div>
                             </form>
                         </div>
