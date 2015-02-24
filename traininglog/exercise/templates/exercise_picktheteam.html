@@ -1,0 +1,64 @@
+<!-- Display the pick the team page to the users. -->
+{% extends 'dashboard_layout.html' %}
+{% block title %}Pick the Team{% endblock %}
+{%block breadcrumb %}
+<li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+<li><a href="{{ url_for('exercise.index') }}">Exercise</a></li>
+<li class="active">Pick the Team</li>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2" style="padding-top:20px;">
+    <div class="text-box">
+        <a href="{{ url_for('exercise.index') }}">Back</a>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>{{ page_title }}</h1>
+        </div>
+        <!-- Table to show the team. -->
+        <table class="table table-hover">
+            <tr>
+                <th>Member:</th>
+                <th>Total Calories Burned:</th>
+                <th>Total Hours Exercised:</th>
+            </tr>
+            <!-- Get the top 8 members. -->
+            {% for member in members_ordered[:8] %}
+            <tr>
+                <td>
+                <!-- If the member has exercise data, link to their first bit of data. -->
+                {% if member[0].exercise_data %}
+                <a href="{{url_for('exercise.view_exercise', exercise_id=member[0].exercise_data[0].id)}}">{{ member[0].get_full_name() }}</a>
+                {%else%}
+                <!-- If they have no exercise data. -->
+                <a href="#">{{ member[0].get_full_name() }}</a>
+                {% endif %}
+                </td>
+                <td>{{ member[1] }} Calories</td>
+                <td>{{ member[2] }} Hours</td>
+            </tr>
+            {% endfor %}
+            <!-- If we are not picking the team. -->
+            {% if not pick_team %}
+                <!-- Display the rest of the members. -->
+                {% for member in members_ordered[8:] %}
+                <tr>
+                    <td>
+                    <!-- If the member has exercise data, link to their first bit of data. -->
+                    {% if member[0].exercise_data %}
+                    <a href="{{url_for('exercise.view_exercise', exercise_id=member[0].exercise_data[0].id)}}">{{ member[0].get_full_name() }}</a>
+                    {%else%}
+                    <!-- If they have no exercise data. -->
+                    <a href="#">{{ member[0].get_full_name() }}</a>
+                    {% endif %}
+                    </td>
+                    <td>{{ member[1] }} Calories</td>
+                    <td>{{ member[2] }} Hours</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </div><!-- .text-box -->
+  </div><!-- .col-md-8 col-md-offset-2 -->
+</div><!-- .row -->
+{% endblock %}

@@ -14,6 +14,7 @@ from traininglog.models import Member, Exercise, Weight, Message, RunningLookUp,
 from traininglog import db
 from datetime import datetime, date, timedelta
 from querying_functions import *
+from operator import itemgetter
 
 # Setup the exercise blueprint.
 exercise_blueprint = Blueprint(
@@ -388,8 +389,6 @@ def compare():
     
     return render_template('compare.html', compare_form=compare_form)
 
-    
-
 @exercise_blueprint.route('/picktheteam')
 @login_required
 def picktheteam():
@@ -397,5 +396,33 @@ def picktheteam():
     Page to display the team of eight runners.
     """
 
-    return "Pick the team"
+    # Get all of the members in the database.
+    members = Member.query.all()
+
+    # Create a datetime object for this year.
+    date = datetime(datetime.utcnow().year,1,1)
+
+    # Create a new list for the ordered members to be stored in.
+    members_ordered=[]
+
+    # For each member.
+    for member in members:
+
+        # Calculate the total calories burned for that member this year.
+        calories_burned = get_cals_total(date=date,member=member)
+        # Calculate the total hours exercised for that member this year.
+        hours_exercised = get_exercise_total(date=date, member=member)
+        # Add a tuple of the member and the calories burned to the ordered members list.
+        members_ordered.append((member, calories_burned, hours_exercised))
+
+    # Actually order the list by the second element in each one. (The calories burned.)
+    # (Reversing the list as it orders it in ascending order.)
+    members_ordered = sorted(members_ordered, key=itemgetter(1))[::-1]
+    
+    return render_template("exercise_picktheteam.html", page_title="Pick the Team",pick_team=True, members_ordered=members_ordered)
+
+
+
+
+    
 
