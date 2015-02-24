@@ -410,6 +410,12 @@ def picktheteam():
         page_title="Pick the Team"
         pick_team=True
 
+    # Get url argument to see if we are ordering by calories_burned or total hours exercised.
+    if request.args.get('order_by') == "hours":
+        order_by = 2
+    else: 
+        order_by = 1
+
     # Create a new list for the ordered members to be stored in.
     members_ordered=[]
 
@@ -425,7 +431,7 @@ def picktheteam():
 
     # Actually order the list by the second element in each one. (The calories burned.)
     # (Reversing the list as it orders it in ascending order.)
-    members_ordered = sorted(members_ordered, key=itemgetter(1))[::-1]
+    members_ordered = sorted(members_ordered, key=itemgetter(order_by))[::-1]
     
     return render_template("exercise_picktheteam.html", page_title=page_title,pick_team=pick_team, members_ordered=members_ordered)  
 
