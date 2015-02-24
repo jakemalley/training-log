@@ -402,6 +402,14 @@ def picktheteam():
     # Create a datetime object for this year.
     date = datetime(datetime.utcnow().year,1,1)
 
+    # Get url argument to see if we need to display all the member or just the top 8.
+    if request.args.get('all') == "true":
+        page_title="All Members"
+        pick_team=False
+    else:
+        page_title="Pick the Team"
+        pick_team=True
+
     # Create a new list for the ordered members to be stored in.
     members_ordered=[]
 
@@ -419,10 +427,5 @@ def picktheteam():
     # (Reversing the list as it orders it in ascending order.)
     members_ordered = sorted(members_ordered, key=itemgetter(1))[::-1]
     
-    return render_template("exercise_picktheteam.html", page_title="Pick the Team",pick_team=True, members_ordered=members_ordered)
-
-
-
-
-    
+    return render_template("exercise_picktheteam.html", page_title=page_title,pick_team=pick_team, members_ordered=members_ordered)  
 
