@@ -31,6 +31,8 @@
                         </ol>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
+                        <!-- Link to pick the team. -->
+                        <li><a href="{{ url_for('exercise.index') }}#picktheteam">Pick the Team</a></li>
                         <!-- Messages -->
                         {% if current_user.message_data %}
                         <!-- If there is any messages -->
@@ -56,7 +58,7 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Exercise<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url_for('exercise.index')}}">My Exercise
+                                <li><a href="{{ url_for('exercise.index')}}">My Exercise</a></li>
                                 <li><a href="{{ url_for('exercise.view')}}">All Exercise</a></li>
                                 <li class="divider"></li>
                                 <li><a href="{{ url_for('exercise.add_running')}}">Add Running</a></li>
@@ -90,25 +92,26 @@
             <!-- Content from child templates goes here. -->
             {% block content %}{% endblock %}
 
-            <nav class="navbar navbar-default navbar-fixed-bottom">
-                <div class="container">
-                <p class="navbar-text">&copy; Copyright Parkwood Vale Harriers 2015</p>
-                <p class="navbar-text navbar-right"></p>
-                
-                    <!-- Display any flashed (generic messages) to the user. -->
-                    {% for category, message in get_flashed_messages(with_categories=true) %}
-                        <p class="navbar-text pull-right">
-                            {% if category == 'error' %}
-                            <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
-                            {% else %}
-                            <span class="glyphicon glyphicon-comment" style="color:#5cb85c;" aria-hidden="true"></span>
-                            {% endif %}
-                            {{ message }}
-                        </p>
-                    {% endfor %}
-                </div>
-            </nav>
         </div><!-- .container -->
+
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+            <p class="navbar-text">&copy; Copyright Parkwood Vale Harriers 2015</p>
+            <p class="navbar-text navbar-right"></p>
+            
+                <!-- Display any flashed (generic messages) to the user. -->
+                {% for category, message in get_flashed_messages(with_categories=true) %}
+                    <p class="navbar-text pull-right">
+                        {% if category == 'error' %}
+                        <span class="glyphicon glyphicon-exclamation-sign" style="color:#bb321f;" aria-hidden="true"></span>
+                        {% else %}
+                        <span class="glyphicon glyphicon-comment" style="color:#5cb85c;" aria-hidden="true"></span>
+                        {% endif %}
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </div>
+        </nav>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

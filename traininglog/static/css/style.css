@@ -22,6 +22,17 @@ body {
     text-align: center;
 }
 
+/* Customize the navbar. */
+.navbar-default{
+    background-color: #F8F8F8;
+}
+ul.navbar-right a:hover {
+    color: #fff !important;
+}
+ul.navbar-right li:hover{
+    background-color: #C6C6C6 ;
+}
+
 /* Custom text boxes with drop shadow. */
 .text-box{
     -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
@@ -91,7 +102,7 @@ body {
     background-color:transparent;
 }
 
-/* Canvas */
+/* Canvas (Used by charts) */
 canvas {
     width: 100% !important;
     max-width: 800px;
