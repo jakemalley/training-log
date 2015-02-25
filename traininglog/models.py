@@ -250,7 +250,7 @@ class Member(db.Model):
         self.email=email.lower()
         # Hash the password
         self.password=bcrypt.generate_password_hash(password)
-        self.gender=gender
+        self.gender=gender.lower()
         self.height=height
         self.address_line_1=address_line_1.lower()
         self.city=city.lower()
