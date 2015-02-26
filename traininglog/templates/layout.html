@@ -38,7 +38,7 @@
                     <form class="navbar-form navbar-right" role="form" method="post" action="{{ url_for('login.login') }}">
                     {{ user_login_form.csrf_token }}
                         <div class="form-group">
-                            {{ user_login_form.email(class="form-control",placeholder="email") }}
+                            {{ user_login_form.email(class="form-control",placeholder="email",type="email") }}
                             {{ user_login_form.password(class="form-control",placeholder="password") }}
                         </div>
                         <button type="submit" class="btn btn-blue">Sign In</button>
