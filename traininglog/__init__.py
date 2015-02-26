@@ -31,7 +31,7 @@ login_manager.init_app(app)
 # Define the route for logging in.
 login_manager.login_view = "login.login"
 # Define the route for refreshing login.
-login_manager.refresh_view = "accounts.login"
+login_manager.refresh_view = "login.login"
 # Message flashed when logging in.
 login_manager.needs_refresh_message = (
     u"To protect your account, please reauthenticate to access this page."
