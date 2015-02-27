@@ -6,6 +6,7 @@
 Define all of the routes for the exercise blueprint.
 """
 
+# Imports 
 from flask import flash, redirect, render_template, \
                 request, url_for, Blueprint, abort
 from flask.ext.login import login_required, current_user
@@ -50,6 +51,7 @@ def index():
     compare_form.compare_member_1.choices = choices
     compare_form.compare_member_2.choices = choices
 
+    # Display the exercise home page passing in the forms and recent data etc.
     return render_template('index.html', add_running_form=add_running_form, add_swimming_form=add_swimming_form, add_cycling_form=add_cycling_form, exercise_data=exercise_data,compare_form=compare_form)
 
 @exercise_blueprint.route('/add_running', methods=['GET','POST'])
@@ -113,6 +115,7 @@ def add_running():
     # Get the last 4 exercises for running.
     running_data = Exercise.query.filter_by(exercise_type='running',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
+    # Display the add running page.
     return render_template('add_running.html', add_running_form=add_running_form, message=message,running_data=running_data)
 
 @exercise_blueprint.route('/add_cycling', methods=['GET','POST'])
@@ -176,6 +179,7 @@ def add_cycling():
     # Get the last 4 exercises for running.
     cycling_data = Exercise.query.filter_by(exercise_type='cycling',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
+    # Display the add cycling page.
     return render_template('add_cycling.html', add_cycling_form=add_cycling_form, message=message, cycling_data=cycling_data)
     
 @exercise_blueprint.route('/add_swimming', methods=['GET','POST'])
@@ -239,6 +243,7 @@ def add_swimming():
     # Get the last 4 exercises for running.
     swimming_data = Exercise.query.filter_by(exercise_type='swimming',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
+    # Display the add swimming page.
     return render_template('add_swimming.html', add_swimming_form=add_swimming_form, message=message, swimming_data=swimming_data)
 
 @exercise_blueprint.route('/view')
@@ -249,8 +254,10 @@ def view():
     It allows users to then click on specific events,
     which can then be viewed with view_exercise
     """
+    # Select the exercise data for the current member.
     all_exercise_data = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).all()
 
+    # Display the view page passing in all the exercise data.
     return render_template('view.html',all_exercise_data=all_exercise_data,member=current_user)
 
 @exercise_blueprint.route('/view/<exercise_id>')
@@ -275,12 +282,14 @@ def view_exercise(exercise_id):
             # Commit the changes.
             db.session.commit()
 
+        # Get all of the exercise for the member of the given exercise.
         all_exercise_data = Exercise.query.filter_by(member=exercise.member).order_by(Exercise.id.desc()).all()
 
     else:
         # The exercise ID is invalid abort with HTTP 404
         abort(404)
 
+    # Display the view page for a specific exercise event.
     return render_template('view.html',all_exercise_data=all_exercise_data,exercise=exercise,member=exercise.member,edit_exercise_form=edit_exercise_form)
 
 @exercise_blueprint.route('/edit_exercise', methods=['POST','GET'])
@@ -345,12 +354,14 @@ def compare():
         if compare_form.validate_on_submit():
             # Get data from the compare form.
 
+            # Get the member objects for both of the members select on the form.
             compare_member1 = Member.query.filter_by(id=compare_form.compare_member_1.data).first()
             compare_member2 = Member.query.filter_by(id=compare_form.compare_member_2.data).first()
 
             # Get todays date.
             now = datetime.utcnow()
 
+            # Create compare data for member 1.
             compare_member_1_data = {
                                     "name":compare_member1.get_full_name(),
                                     "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member1),
@@ -362,6 +373,7 @@ def compare():
                                     "swimming_time":get_hours_swimming(member=compare_member1),
                                     "swimming_cals":get_cals_swimming(member=compare_member1),
                                     }
+            # Create compare data for member 2.
             compare_member_2_data = {
                                     "name":compare_member2.get_full_name(),
                                     "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member2),
@@ -387,6 +399,7 @@ def compare():
 
             return render_template('compare.html',compare_member_1_data=compare_member_1_data,compare_member_2_data=compare_member_2_data, compare_form=compare_form,chart_data_time_1=chart_data_time_1,chart_data_time_2=chart_data_time_2,chart_data_calories_1=chart_data_calories_1,chart_data_calories_2=chart_data_calories_2)
     
+    # Display the compare page.   
     return render_template('compare.html', compare_form=compare_form)
 
 @exercise_blueprint.route('/picktheteam')
@@ -433,5 +446,6 @@ def picktheteam():
     # (Reversing the list as it orders it in ascending order.)
     members_ordered = sorted(members_ordered, key=itemgetter(order_by))[::-1]
     
+    # Display the page to pick the team.
     return render_template("exercise_picktheteam.html", page_title=page_title,pick_team=pick_team, members_ordered=members_ordered)  
 

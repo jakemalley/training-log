@@ -6,6 +6,7 @@
 Define the routes for the login blueprint.
 """
 
+# Imports
 from flask import flash, redirect, render_template, request, \
                     url_for, Blueprint
 from forms import LoginForm, SignUpForm, EditDetailsForm, ChangePasswordForm
@@ -68,6 +69,7 @@ def login():
                 # Either the user does not exist or the password doesn't match.
                 # Error message left vague for security.
                 error="Invalid Credentials, Please try again."
+    
     # Display the login_login.html page to the user.
     return render_template('login_login.html',user_login_form=user_login_form, error=error)
 
@@ -144,6 +146,7 @@ def signup():
         else:
             render_template('login_signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
 
+    # Display the sign up page.
     return render_template('login_signup.html', user_signup_form=user_signup_form, user_login_form=LoginForm(), error=error)
 
 @login_blueprint.route('/logout')
@@ -152,8 +155,11 @@ def logout():
     """
     Logs the current user out of the application.
     """
+    # Logout the current user.
     logout_user()
+    # Flash a message to the user.
     flash('You were logged out!')
+    # Redirect to the welcome page.
     return redirect(url_for('home.welcome'))
 
 @login_blueprint.route('/myprofile', methods=['GET','POST'])
@@ -183,6 +189,7 @@ def myprofile():
                 error = "Incorrect Password, changes have not been made."
         else:
             render_template('login_myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
+    # Display the my profile to the user.
     return render_template('login_myprofile.html',error=error, user_edit_details_form=user_edit_details_form, user_change_password_form=ChangePasswordForm())
 
 @login_blueprint.route('/chgpasswd', methods=['POST','GET'])
@@ -216,8 +223,11 @@ def chgpasswd():
             # Flash a message to the user.
             flash("Password has been successfully changed.")
         else:
+            # Flash an error message.
             flash("Invalid password password has not been changed",'error')
     
+    # Display the my profile page to the user with the specific errors of 
+    # the change password form.
     return render_template('login_myprofile.html',error=error, user_edit_details_form=EditDetailsForm(), user_change_password_form=user_change_password_form)
 
 @login_blueprint.route('/deleteaccount', methods=['POST','GET'])
@@ -251,11 +261,12 @@ def delete_account():
         # Flash a message.
         flash('Account has been delete!')
         # Redirect to the welcome page.
-        return redirect(url_for('home.welcome'))
+        return redirect(request.referrer or url_for('home.welcome'))
         
     else:
         flash("Invalid password account has not been deleted.",'error')
 
+    # Redirect to the my profile page.
     return redirect(url_for('login.myprofile'))
 
 @login_blueprint.route('/deactivateaccount', methods=['POST','GET'])
@@ -282,7 +293,11 @@ def deactivate_account():
         # Redirect to the welcome page.
         return redirect(url_for('home.welcome'))
     else:
+        # Flash an error message.
         flash("Invalid password account has not been deactivated.",'error')
+    
+    # Redirect back to the page they came from.
+    return redirect(request.referrer or url_for('login.myprofile'))
 
 @login_blueprint.route('/message/<message_id>')
 @login_required
@@ -298,13 +313,18 @@ def delete_message(message_id):
         # Query for the message.
         messages = Message.query.filter_by(member=current_user, id=message_id).all()
     
+    # For all of the messages in the list.
     for msg in messages:
         # If the message exists.
         if msg is not None:
+            # Delete the message.
             db.session.delete(msg)
+            # Commit the changes.
             db.session.commit()
+            # Flash a success message.
             flash("Message Deleted")
         else:
+            # Flash an error message.
             flash("Cannot delete message.","error")
 
     # Return to the previous page. (Or the dashboard if that is not possible.)

@@ -5,9 +5,9 @@
 """
 Define the routes for the dashboard blueprint.
 """
-
-from flask import flash, redirect, render_template, \
-                request, url_for, Blueprint
+app
+# Imports 
+from flask import render_template, Blueprint
 from flask.ext.login import login_required, current_user
 from traininglog.models import Exercise
 from traininglog.exercise.querying_functions import *
@@ -59,7 +59,9 @@ def dashboard():
     exercise_total_year = get_exercise_total(datetime(now.year,1,1))
     exercise_total_today = get_exercise_total(now)
 
+    # Calculate the width of the progress bars.
     progress_today_width = int(float(exercise_total_today/4)*100)
     progress_year_width = int(float(exercise_total_today/1460)*100)
 
+    # Render the template passing in all of the data.
     return render_template('dashboard_dashboard.html',pie_chart_data=pie_chart_data, exercise_data=exercise_data,line_chart_data=line_chart_data,line_chart_labels=line_chart_labels,exercise_total_year=exercise_total_year,exercise_total_today=exercise_total_today,progress_today_width=progress_today_width,progress_year_width=progress_year_width)

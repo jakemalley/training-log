@@ -6,8 +6,8 @@
 Define the routes for the home blueprint.
 """
 
-from flask import flash, redirect, render_template, \
-                request, url_for, Blueprint,abort
+# Imports.
+from flask import redirect, render_template, url_for, Blueprint
 from traininglog.login.forms import LoginForm
 from flask.ext.login import current_user
 
@@ -26,9 +26,12 @@ def index():
     the dashboard otherwise redirects to the 
     welcome page.
     """
+    # If the user is logged in.
     if current_user.is_authenticated():
+        # Redirect to the dashboard.
         return redirect(url_for('dashboard.dashboard'))
     else:
+        # Redirect to the welcome page.
         return redirect(url_for('home.welcome'))
 
 @home_blueprint.route('/welcome')
@@ -36,5 +39,5 @@ def welcome():
     """
     Renders the welcome.html template and displays it the user.
     """
-
+    # Render the welcome page passing in the login form.
     return render_template('home_welcome.html',user_login_form=LoginForm())

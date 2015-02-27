@@ -6,6 +6,7 @@
 Define the routes for the admin blueprint.
 """
 
+# Imports
 from flask import redirect, render_template, \
                 request, url_for, Blueprint, abort, flash
 from flask.ext.login import fresh_login_required, current_user
@@ -21,8 +22,8 @@ admin_blueprint = Blueprint(
     template_folder='templates'
     )
 
-# Admin Required - Only allows members with is_admin = 1 access these views.
-# Allows me to use the decorator @admin_required.
+# Admin Required - Only allows members with is_admin = 1 to access these views.
+# Allows me to use the decorator @admin_required on different routes.
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -40,13 +41,18 @@ def dashboard():
     """
     The dashboard for the admin blueprint.
     """
+
+    # Get a list of all the members.
     members = Member.query.all()
+    # Get a list of all the active members. (Members who have logged in today.)
     active_members = Member.query.filter(Member.last_login_date>datetime.utcnow().date()).all()
+    # Create a dictionary of the stats.
     stats = {
-                "total_members":len(members),
-                "active_members":len(active_members)
+                "total_members":len(members), # Total number of members.
+                "active_members":len(active_members) # Total number of active members.
             }
 
+    # Render the admin index page passing in the members and stats.
     return render_template('admin_index.html', members=members,stats=stats)
 
 @admin_blueprint.route('/view/<member_id>', methods=['POST','GET'])
@@ -89,7 +95,8 @@ def view(member_id):
             return redirect(url_for('admin.dashboard'))
 
         else:
-            # User was not marked as deleted, update their details.
+            # User was not marked as deleted, 
+            # update their details with the details from the form.
             member.firstname = admin_edit_form.firstname.data
             member.surname = admin_edit_form.surname.data
             member.email = admin_edit_form.email.data
@@ -120,7 +127,7 @@ def view(member_id):
 			# Render the template passing in the member and form.
             return render_template('admin_view.html', member=member, admin_edit_form=admin_edit_form)
         else:
-			# Raise a HTTP 404 error.
+			# Raise a HTTP 404 (Page not found) error.
             abort(404)
 
 

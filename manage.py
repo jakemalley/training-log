@@ -3,10 +3,10 @@
 # 15/01/2015
 
 """
-Manage file uses Flask-Script to create a Manager
+Manage.py file uses Flask-Script to create a Manager
 to allow us to run the app server and open a shell
 inside the application context. It also provided the ability
-to create custom commands.
+to create custom commands. As well as perform database migrations.
 """
 
 # Imports
@@ -16,19 +16,19 @@ from traininglog import app, db
 
 # Create the manager object.
 manager = Manager(app)
-# Create the migration object.
+# Create the migration object. (For database migrations.)
 migrate = Migrate(app, db)
 
-# Get options for the server from the config.
+# Get options for the server from the configuration.
 try:
-    # Get host from the config.
+    # Get host from the configuration object.
     host = app.config['HOST']
 except KeyError:
     # If the option isn't present use the default.
     host = '127.0.0.1'
 
 try:
-    # Get the port from the config.
+    # Get the port from the configuration object.
     port = app.config['PORT']
 except KeyError:
     # If the option isn't present use the default.
@@ -65,25 +65,25 @@ def init_db():
     # Generate the look up tables.
 	# As per the data for caloried_burned per hour for someone 
 	# of weight 80KG (Data given on the task sheet.)
-    db.session.add(RunningLookUp(1, 472))
-    db.session.add(RunningLookUp(2, 590))
-    db.session.add(RunningLookUp(3, 679))
-    db.session.add(RunningLookUp(4, 797))
-    db.session.add(RunningLookUp(5, 885))
-    db.session.add(RunningLookUp(6, 944))
+    db.session.add(RunningLookUp(1, 472)) # 5 Mph (12 Minute mile)
+    db.session.add(RunningLookUp(2, 590)) # 6 Mph (10 Minute mile)
+    db.session.add(RunningLookUp(3, 679)) # 7 Mph (8.5 Minute mile)
+    db.session.add(RunningLookUp(4, 797)) # 8 Mph (7.5 Minute mile)
+    db.session.add(RunningLookUp(5, 885)) # 9 Mph (6.5 Minute mile)
+    db.session.add(RunningLookUp(6, 944)) # 10 Mph (6 Minute mile)
 
-    db.session.add(CyclingLookUp(1,236))
-    db.session.add(CyclingLookUp(2,354))
-    db.session.add(CyclingLookUp(3,472))
-    db.session.add(CyclingLookUp(4,590))
-    db.session.add(CyclingLookUp(5,708))
-    db.session.add(CyclingLookUp(6,944))
+    db.session.add(CyclingLookUp(1,236)) # <10 Mph, Leisure Cycling
+    db.session.add(CyclingLookUp(2,354)) # 10-11.9 Mph, Gentle
+    db.session.add(CyclingLookUp(3,472)) # 12-13.9 Mph, Moderate
+    db.session.add(CyclingLookUp(4,590)) # 14-15.9 Mph, Vigorous
+    db.session.add(CyclingLookUp(5,708)) # 16-20 Mph, Very Fast
+    db.session.add(CyclingLookUp(6,944)) # >20 Mph, Racing
 
-    db.session.add(SwimmingLookUp(1,413))
-    db.session.add(SwimmingLookUp(2,590))
-    db.session.add(SwimmingLookUp(3,413))
-    db.session.add(SwimmingLookUp(4,590))
-    db.session.add(SwimmingLookUp(5,649))
+    db.session.add(SwimmingLookUp(1,413)) # Freestyle, Slow
+    db.session.add(SwimmingLookUp(2,590)) # Freestyle, Fast
+    db.session.add(SwimmingLookUp(3,413)) # Backstroke
+    db.session.add(SwimmingLookUp(4,590)) # Breaststroke
+    db.session.add(SwimmingLookUp(5,649)) # Butterfly
 
     # Commit the Changes.
     db.session.commit()
@@ -120,6 +120,7 @@ manager.add_command('db', MigrateCommand)
 # we have specified.
 manager.add_command('runserver', server)
 
+# If it wasn't imported, but run directly.
 if __name__ == "__main__":
     # Run the script manager.
     manager.run()

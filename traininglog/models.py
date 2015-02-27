@@ -16,67 +16,85 @@ from sqlalchemy.orm import relationship
 class RunningLookUp(db.Model):
 
     """
-    LookUp Table for running.
+    LookUp Table for calories burned per hour when running.
     """
     # The table name.
     __tablename__ = "RunningLookUp"
     # Table fields.
+    # Integer field for ID (primary key)
     id = db.Column(db.Integer,primary_key=True)
+    # Integer field for calories burned.
     calories_burned = db.Column(db.Integer, nullable=False)
 
     def __init__(self, id, calories_burned):
-
+        """
+        Constructor sets the ID and calories_burned on initialization.
+        """
         self.id = id
         self.calories_burned = calories_burned
 
 class CyclingLookUp(db.Model):
 
     """
-    LookUp Table for cycling.
+    LookUp Table for calories burned per hour when cycling.
     """
     # The table name.
     __tablename__ = "CyclingLookUp"
     # Table fields.
+    # Integer field for ID (primary key)
     id = db.Column(db.Integer,primary_key=True)
+    # Integer field for calories burned.
     calories_burned = db.Column(db.Integer, nullable=False)
 
     def __init__(self, id, calories_burned):
-
+        """
+        Constructor sets the ID and calories_burned on initialization.
+        """
         self.id = id
         self.calories_burned = calories_burned
 
 class SwimmingLookUp(db.Model):
 
     """
-    LookUp Table for swimming.
+    LookUp Table for calories burned per hour when swimming.
     """
     # The table name.
     __tablename__ = "SwimmingLookUp"
     # Table fields.
+    # Integer field for ID (primary key)
     id = db.Column(db.Integer,primary_key=True)
+    # Integer field for calories burned.
     calories_burned = db.Column(db.Integer, nullable=False)
 
     def __init__(self, id, calories_burned):
-
+        """
+        Constructor sets the ID and calories_burned on initialization.
+        """
         self.id = id
         self.calories_burned = calories_burned
 
 class Message(db.Model):
 
     """
-    Entity to store the messages.
+    Entity to store the messages between users.
     """
 
     # The table name.
     __tablename__ = "Message"
     # The table fields.
+    # Integer field for ID (primary key)
     id = db.Column(db.Integer,primary_key=True)
+    # DateTime field for the date the message was generated.
     date = db.Column(db.DateTime, nullable=False)
+    # String field for the generated message.
     message_text = db.Column(db.String, nullable=False)
+    # Integer field for the member ID. (Foreign Key.)
     member_id = db.Column(db.Integer, ForeignKey('Member.id'))
 
     def __init__(self, date, message_text, member_id):
-
+        """
+        Constructor to set the date, message text and member id when initialized.
+        """
         self.date=date
         self.message_text=message_text
         self.member_id=member_id
@@ -102,13 +120,19 @@ class Weight(db.Model):
     # The table name.
     __tablename__ = "Weight"
     # Table fields.
+    # Integer field for ID (primary key)
     id = db.Column(db.Integer,primary_key=True)
+    # DateTime field for the date the weight was added.
     date = db.Column(db.DateTime, nullable=False)
+    # Float field for the value for the members weight.
     weight = db.Column(db.Float, nullable=False)
+    # Integer field for the member ID. (Foreign Key.)
     member_id = db.Column(db.Integer, ForeignKey('Member.id'))
 
     def __init__(self, weight, date, member_id):
-
+        """
+        Constructor to set the weight, member id and weight when initialized.
+        """
         self.weight=weight
         self.member_id=member_id
         self.date=date
@@ -148,16 +172,27 @@ class Exercise(db.Model):
     # The table name.
     __tablename__ = "Exercise"
     # Table fields.
+    # Integer field for ID (primary key)
     id = db.Column(db.Integer,primary_key=True)
+    # DateTime field for the date the exercise was added.
     date = db.Column(db.DateTime, nullable=False)
+    # Enum field for the type of exercise.
     exercise_type = db.Column(db.Enum('running', 'cycling', 'swimming', name='exercise_type'))
+    # The exercise level which corresponds with the ID of the value for calories burned 
+    # in the LookUp for the exercise.
     exercise_level = db.Column(db.Integer, nullable=False)
+    # Float field for the duration of exercise.
     exercise_duration = db.Column(db.Float, nullable=False)
+    # Float field to store the value for calories burned.
     calories_burned = db.Column(db.Float, nullable=False)
+    # Integer field for the member ID. (Foreign Key.)
     member_id = db.Column(db.Integer, ForeignKey('Member.id'))
 
     def __init__(self, date, exercise_type, exercise_level, exercise_duration, calories_burned, member_id):
-
+        """
+        Constructor to set the date, exercise_type, exercise_level, exercise_duration, 
+        calories_burned, member_id when initialized.
+        """
         self.date=date
         self.exercise_type=exercise_type
         self.exercise_level=exercise_level
@@ -221,6 +256,7 @@ class Member(db.Model):
     # The table name.
     __tablename__ = "Member"
     # Table fields.
+    # Integer field for ID (primary key)
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String, nullable=False)
     surname = db.Column(db.String, nullable=False)
@@ -367,7 +403,6 @@ class Member(db.Model):
         """
         Updates the users details to the details given.
         """
-        print("UPDATEs")
         self.firstname=firstname.lower()
         self.surname=surname.lower()
         self.email=email.lower()
@@ -385,6 +420,6 @@ class Member(db.Model):
     def __repr__(self):
         """
         Depicts how the object is represented when printed out in the
-        command line.
+        command line. (Really only needed for development.)
         """
         return '<Name {}'.format(self.firstname+self.surname)

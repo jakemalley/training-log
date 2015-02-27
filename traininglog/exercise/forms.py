@@ -13,6 +13,7 @@ from wtforms.validators import DataRequired, NumberRange
 
 # DataRequired validator makes sure the data is present in the field.
 # NumberRange makes sure the data is between a specific number range.
+
 class AddRunningForm(Form):
 
     """
@@ -110,5 +111,6 @@ class CompareMemberForm(Form):
     member to compare with.
     """
 
+    # Fields to select the members to compare.
     compare_member_1 = SelectField('compare_member_1')
     compare_member_2 = SelectField('compare_member_2')
