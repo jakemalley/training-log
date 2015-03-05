@@ -5,7 +5,7 @@
 """
 Define the routes for the dashboard blueprint.
 """
-app
+
 # Imports 
 from flask import render_template, Blueprint
 from flask.ext.login import login_required, current_user
