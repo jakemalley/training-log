@@ -78,5 +78,3 @@ def add_weight():
 
     # Display the add weight page.
     return render_template('weight_add_weight.html', add_weight_form=add_weight_form)
-
-

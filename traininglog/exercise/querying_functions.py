@@ -1,4 +1,4 @@
-# querying_functions.py
+# exercise/querying_functions.py
 # Jake Malley
 # 06/02/15
 

@@ -72,6 +72,3 @@ def error_internal_server_error(error):
     error_dictionary = dict(title="Internal server error.", description="The server has encountered a server error.", error_code=error)
     # Display the error page passing the error_dictionary.
     return render_template("error.html",error_dictionary=error_dictionary)
-
-
-

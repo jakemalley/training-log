@@ -1,4 +1,4 @@
-# forms.py
+# login/forms.py
 # Jake Malley
 # 19/01/15
 
@@ -8,7 +8,7 @@ Defines all the forms used in the login blueprint.
 
 # Imports
 from flask_wtf import Form
-from wtforms import TextField, TextAreaField, PasswordField, SelectField, DecimalField, BooleanField
+from wtforms import TextField, PasswordField, SelectField, DecimalField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, NumberRange
 
 # DataRequired validator makes sure the data is present in the field.
@@ -81,7 +81,7 @@ class SignUpForm(Form):
         validators=[DataRequired(),NumberRange(min=0,max=250)]
     )
     # Text field for the first line of the users address.
-    address_line_1 = TextAreaField(
+    address_line_1 = TextField(
         'address',
         validators=[DataRequired(),Length(min=5, max=200)]
     )
@@ -163,14 +163,3 @@ class ChangePasswordForm(Form):
         'new_password_confirm',
         validators=[DataRequired(),EqualTo('new_password', message='Passwords must match.')]
     )
-
-
-
-
-
-
-
-
-
-
-

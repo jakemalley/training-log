@@ -204,7 +204,7 @@ def chgpasswd():
     """
 
     if request.method == 'GET':
-        return redirect(url_for('login.myprofile'))
+        return redirect(request.referrer or url_for('login.myprofile'))
 
      # Create an empty error variable.
     error = None
@@ -329,5 +329,3 @@ def delete_message(message_id):
 
     # Return to the previous page. (Or the dashboard if that is not possible.)
     return redirect(request.referrer or url_for('dashboard.dashboard'))
-
-

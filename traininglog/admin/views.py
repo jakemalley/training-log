@@ -129,6 +129,3 @@ def view(member_id):
         else:
 			# Raise a HTTP 404 (Page not found) error.
             abort(404)
-
-
-

@@ -1,4 +1,4 @@
-# admin/views.py
+# admin/forms.py
 # Jake Malley
 # 19/02/15
 

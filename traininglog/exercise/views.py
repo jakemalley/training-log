@@ -327,7 +327,7 @@ def edit_exercise():
                 flash("Exercise has been updated.")
                 
     # Send them back to where they came from.
-    return redirect(request.referrer)
+    return redirect(request.referrer or url_for('exercise.index'))
 
 
 @exercise_blueprint.route('/compare',methods=['POST','GET'])
@@ -355,40 +355,40 @@ def compare():
             # Get data from the compare form.
 
             # Get the member objects for both of the members select on the form.
-            compare_member1 = Member.query.filter_by(id=compare_form.compare_member_1.data).first()
-            compare_member2 = Member.query.filter_by(id=compare_form.compare_member_2.data).first()
+            compare_member_1 = Member.query.filter_by(id=compare_form.compare_member_1.data).first()
+            compare_member_2 = Member.query.filter_by(id=compare_form.compare_member_2.data).first()
 
             # Get todays date.
             now = datetime.utcnow()
 
             # Create compare data for member 1.
             compare_member_1_data = {
-                                    "name":compare_member1.get_full_name(),
-                                    "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member1),
-                                    "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member1),
-                                    "running_time":get_hours_running(member=compare_member1),
-                                    "running_cals":get_cals_running(member=compare_member1),
-                                    "cycling_time":get_hours_cycling(member=compare_member1),
-                                    "cycling_cals":get_cals_cycling(member=compare_member1),
-                                    "swimming_time":get_hours_swimming(member=compare_member1),
-                                    "swimming_cals":get_cals_swimming(member=compare_member1),
+                                    "name":compare_member_1.get_full_name(),
+                                    "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member_1),
+                                    "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member_1),
+                                    "running_time":get_hours_running(member=compare_member_1),
+                                    "running_cals":get_cals_running(member=compare_member_1),
+                                    "cycling_time":get_hours_cycling(member=compare_member_1),
+                                    "cycling_cals":get_cals_cycling(member=compare_member_1),
+                                    "swimming_time":get_hours_swimming(member=compare_member_1),
+                                    "swimming_cals":get_cals_swimming(member=compare_member_1),
                                     }
             # Create compare data for member 2.
             compare_member_2_data = {
-                                    "name":compare_member2.get_full_name(),
-                                    "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member2),
-                                    "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member2),
-                                    "running_time":get_hours_running(member=compare_member2),
-                                    "running_cals":get_cals_running(member=compare_member2),
-                                    "cycling_time":get_hours_cycling(member=compare_member2),
-                                    "cycling_cals":get_cals_cycling(member=compare_member2),
-                                    "swimming_time":get_hours_swimming(member=compare_member2),
-                                    "swimming_cals":get_cals_swimming(member=compare_member2),
+                                    "name":compare_member_2.get_full_name(),
+                                    "total_time":get_exercise_total(datetime(now.year,1,1),member=compare_member_2),
+                                    "total_cals":get_cals_total(datetime(now.year,1,1),member=compare_member_2),
+                                    "running_time":get_hours_running(member=compare_member_2),
+                                    "running_cals":get_cals_running(member=compare_member_2),
+                                    "cycling_time":get_hours_cycling(member=compare_member_2),
+                                    "cycling_cals":get_cals_cycling(member=compare_member_2),
+                                    "swimming_time":get_hours_swimming(member=compare_member_2),
+                                    "swimming_cals":get_cals_swimming(member=compare_member_2),
                                     }
 
             # Get most recent exercise for the charts
-            compare_member_1_exercise = Exercise.query.filter_by(member=compare_member1).order_by(Exercise.id.desc()).limit(5).all()
-            compare_member_2_exercise = Exercise.query.filter_by(member=compare_member2).order_by(Exercise.id.desc()).limit(5).all()
+            compare_member_1_exercise = Exercise.query.filter_by(member=compare_member_1).order_by(Exercise.id.desc()).limit(5).all()
+            compare_member_2_exercise = Exercise.query.filter_by(member=compare_member_2).order_by(Exercise.id.desc()).limit(5).all()
 
             # Chart data for time
             chart_data_time_1 = [ exercise.exercise_duration for exercise in compare_member_1_exercise][::-1]
@@ -447,5 +447,4 @@ def picktheteam():
     members_ordered = sorted(members_ordered, key=itemgetter(order_by))[::-1]
     
     # Display the page to pick the team.
-    return render_template("exercise_picktheteam.html", page_title=page_title,pick_team=pick_team, members_ordered=members_ordered)  
-
+    return render_template("exercise_picktheteam.html", page_title=page_title,pick_team=pick_team, members_ordered=members_ordered)
