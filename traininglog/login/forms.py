@@ -9,13 +9,34 @@ Defines all the forms used in the login blueprint.
 # Imports
 from flask_wtf import Form
 from wtforms import TextField, PasswordField, SelectField, DecimalField, BooleanField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, NumberRange
+from wtforms.validators import StopValidation,DataRequired, Email, Length, EqualTo, NumberRange
 
 # DataRequired validator makes sure the data is present in the field.
 # Length validator makes sure the field is between a specific lenght
 # EqualTo validator makes sure the field is equal to another field.
 # Email validator makes sure the field is a valid email.  
 # NumberRange makes sure the data is between a specific number range.
+
+def is_a_float(form, field):
+    """
+    Validator to check the field is a float.
+    """
+    print(field.data)
+    if field.data is not None:
+        try:
+            # Try to convert the field to a float.
+            float(field.data)
+        except ValueError:
+            # The field is not a float.
+            field.errors[:] = ['Must be a numerical value.']
+            # Stop all further validations.
+            raise StopValidation()
+    else:
+        # The field is not a float.
+        field.errors[:] = ['This field is required and must be a numerical value.']
+        # Stop all further validations.
+        raise StopValidation()
+
 
 class LoginForm(Form):
 
@@ -24,7 +45,7 @@ class LoginForm(Form):
     """
 
     # Text field for the users email.
-    email = TextField('email',validators=[DataRequired(),Email(message=None)])
+    email = TextField('email',validators=[DataRequired(),Email(message=None),Length(max=50)])
     
     # Password field for the users password.
     password = PasswordField('password',validators=[DataRequired(),Length(max=32)])
@@ -51,7 +72,7 @@ class SignUpForm(Form):
     # Text field for the users email.
     email = TextField(
         'email',
-        validators=[DataRequired(),Email(message=None)]
+        validators=[DataRequired(),Email(message=None),Length(max=50)]
     )
     # Password field for the users chosen password.
     password = PasswordField(
@@ -72,7 +93,7 @@ class SignUpForm(Form):
     height = DecimalField(
         'height',
         places=2,
-        validators=[DataRequired(),NumberRange(min=0,max=3)]
+        validators=[is_a_float, DataRequired(),NumberRange(min=0,max=3)]
     )
     # Decimal field for the users weight.
     weight = DecimalField(
