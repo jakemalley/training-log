@@ -39,5 +39,9 @@ def welcome():
     """
     Renders the welcome.html template and displays it the user.
     """
-    # Render the welcome page passing in the login form.
-    return render_template('home_welcome.html',user_login_form=LoginForm())
+    if current_user.is_authenticated():
+        # Redirect to the dashboard.
+        return redirect(url_for('dashboard.dashboard'))
+    else:
+        # Render the welcome page passing in the login form.
+        return render_template('home_welcome.html',user_login_form=LoginForm())

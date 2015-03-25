@@ -28,6 +28,11 @@ def login():
     Renders the login_login.html template and displays it the user.
     """
 
+    # If the user is logged in.
+    if current_user.is_authenticated():
+        # Redirect to the dashboard.
+        return redirect(url_for('dashboard.dashboard'))
+
     # Create an empty error variable.
     error = None
 
@@ -55,7 +60,7 @@ def login():
                     db.session.commit()
                     # If the user was trying to access a page before he was redirected here
                     # redirect them back to that page.
-                    if request.args.get('next'):
+                    if request.args.get('next') and not request.args.get('next') == "/logout":
                         return redirect(request.args.get('next'))
                     else:
                         # Redirect them to the dashboard page.
@@ -81,6 +86,11 @@ def signup():
     """
     Renders the login_signup.html template and displays it to the user.
     """
+
+    # If the user is logged in.
+    if current_user.is_authenticated():
+        # Redirect to the dashboard.
+        return redirect(url_for('dashboard.dashboard'))
 
     # Create an empty error variable.
     error = None
@@ -227,7 +237,7 @@ def chgpasswd():
             flash("Password has been successfully changed.")
         else:
             # Flash an error message.
-            flash("Invalid password password has not been changed",'error')
+            flash("Invalid password, password has not been changed",'error')
     
     # Display the my profile page to the user with the specific errors of 
     # the change password form.
