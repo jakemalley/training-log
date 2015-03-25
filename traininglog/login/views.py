@@ -31,6 +31,9 @@ def login():
     # Create an empty error variable.
     error = None
 
+    # If there is anything in the URL args.
+    if request.args.get('error'):error = request.args.get('error')
+
     # Create the login form.
     user_login_form = LoginForm()
 
@@ -137,7 +140,7 @@ def signup():
                     # For some reason the user could not be logged in.
                     if not member.is_active():
                         # The account is not activated as account_is_active returns False (AUTO_APPROVE set to False)
-                        error = "Before you can login the system requires an administrator approves your account."
+                        return redirect(url_for('login.login', error="Before you can login, the system requires an administrator approves your account."))
                     else:
                         # Redirect them to the login page. The error will be dealt with there.
                         return redirect(url_for('login.login'))

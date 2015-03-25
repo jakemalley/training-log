@@ -26,7 +26,7 @@ class DefaultConfig(object):
     
     # Options for member sign up.
     # Automatically approve users when they sign up.
-    AUTO_APPROVE = True
+    AUTO_APPROVE = False
     # Automatically make users administrators when they sign up.
     AUTO_ADMIN = False
 

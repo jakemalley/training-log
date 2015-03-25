@@ -21,7 +21,6 @@ def is_a_float(form, field):
     """
     Validator to check the field is a float.
     """
-    print(field.data)
     if field.data is not None:
         try:
             # Try to convert the field to a float.
@@ -37,6 +36,15 @@ def is_a_float(form, field):
         # Stop all further validations.
         raise StopValidation()
 
+def is_alpha_numeric(form, field):
+    """
+    Validator to check the field is alpha numeric.
+    """
+    if field.data is not None and not str(field.data).replace(' ','').isalnum():
+        # The field is not a float.
+        field.errors[:] = ['Must be and alpha-numerical string, and not contain symbols.']
+        # Stop all further validations.
+        raise StopValidation()
 
 class LoginForm(Form):
 
@@ -93,28 +101,28 @@ class SignUpForm(Form):
     height = DecimalField(
         'height',
         places=2,
-        validators=[is_a_float, DataRequired(),NumberRange(min=0,max=3)]
+        validators=[DataRequired(),NumberRange(min=0,max=3),is_a_float]
     )
     # Decimal field for the users weight.
     weight = DecimalField(
         'weight',
         places=2,
-        validators=[DataRequired(),NumberRange(min=0,max=250)]
+        validators=[DataRequired(),NumberRange(min=0,max=250),is_a_float]
     )
     # Text field for the first line of the users address.
     address_line_1 = TextField(
         'address',
-        validators=[DataRequired(),Length(min=5, max=200)]
+        validators=[DataRequired(),Length(min=5, max=200),is_alpha_numeric]
     )
     # Text field for the users city.
     city = TextField(
         'city',
-        validators=[DataRequired(),Length(min=2, max=20)]
+        validators=[DataRequired(),Length(min=2, max=25),is_alpha_numeric]
     )
     # Text field for the users postcode.
     postcode = TextField(
         'postcode',
-        validators=[DataRequired(),Length(min=5,max=9)]
+        validators=[DataRequired(),Length(min=5,max=9),is_alpha_numeric]
     )
 
 class EditDetailsForm(Form):
