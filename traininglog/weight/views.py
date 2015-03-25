@@ -55,6 +55,9 @@ def add_weight():
     # Create the form
     add_weight_form = AddWeightForm()
 
+    # Create an empty error.
+    error = None
+
     # If the method was post.
     if request.method == 'POST':
         # Validate the form.
@@ -64,17 +67,23 @@ def add_weight():
             # Get the time
             now = datetime.utcnow()
 
-            # Add a new entry.
-            db.session.add(Weight(add_weight_form.weight.data, now, current_user.get_id()))
+            last_weights = Weight.query.filter_by(member=current_user).filter(Weight.date >= now.date()).all()
 
-            # Commit the changes.
-            db.session.commit()
+            if len(last_weights) > 5:
+                error = "You cannot change your weight more than 5 times per day, please try again tomorrow."
+            else:
 
-            # Flash a message to the user.
-            flash("New weight successfully added.")
+                # Add a new entry.
+                db.session.add(Weight(add_weight_form.weight.data, now, current_user.get_id()))
 
-            # If it was successful redirect them to the index page.
-            return redirect(url_for('weight.index'))
+                # Commit the changes.
+                db.session.commit()
+
+                # Flash a message to the user.
+                flash("New weight successfully added.")
+
+                # If it was successful redirect them to the index page.
+                return redirect(request.referrer or url_for('weight.index'))
 
     # Display the add weight page.
-    return render_template('weight_add_weight.html', add_weight_form=add_weight_form)
+    return render_template('weight_add_weight.html', add_weight_form=add_weight_form,error=error)

@@ -18,4 +18,4 @@ class AddWeightForm(Form):
     """
 
     # Decimal field for the weight.
-    weight = DecimalField('weight', validators=[DataRequired(), NumberRange(min=0,max=250)])
+    weight = DecimalField('weight', validators=[DataRequired(), NumberRange(min=0,max=200)])

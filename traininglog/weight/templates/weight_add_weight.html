@@ -15,7 +15,15 @@
             <h1>Add Weight</h1>
         </div>
 
+        <!-- If there is an error display it to the user. -->
+        {% if error %}
+            <p class="alert alert-danger">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                {{ error }}
+            </p>
+        {% else %}
         <p>Update your weight below by entering your current weight and click "Add Weight"</p>
+        {% endif %}
 
         <!-- Display the form. -->
         <form role="form" method="post" action="{{ url_for('weight.add_weight') }}">
