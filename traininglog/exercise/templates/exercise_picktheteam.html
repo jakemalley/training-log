@@ -28,7 +28,7 @@
                 <td>
                 <!-- If the member has exercise data, link to their first bit of data. -->
                 {% if member[0].exercise_data %}
-                <a href="{{url_for('exercise.view_exercise', exercise_id=member[0].exercise_data[0].id)}}">{{ member[0].get_full_name() }}</a>
+                <a href="{{url_for('exercise.view_exercise', exercise_id=member[0].exercise_data[-1].id)}}">{{ member[0].get_full_name() }}</a>
                 {%else%}
                 <!-- If they have no exercise data. -->
                 <a href="#">{{ member[0].get_full_name() }}</a>
@@ -46,7 +46,7 @@
                     <td>
                     <!-- If the member has exercise data, link to their first bit of data. -->
                     {% if member[0].exercise_data %}
-                    <a href="{{url_for('exercise.view_exercise', exercise_id=member[0].exercise_data[0].id)}}">{{ member[0].get_full_name() }}</a>
+                    <a href="{{url_for('exercise.view_exercise', exercise_id=member[-1].exercise_data[0].id)}}">{{ member[0].get_full_name() }}</a>
                     {%else%}
                     <!-- If they have no exercise data. -->
                     <a href="#">{{ member[0].get_full_name() }}</a>

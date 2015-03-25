@@ -64,8 +64,9 @@ def add_running():
     # Create the running form.
     add_running_form = AddRunningForm()
 
-    # Create empty message.
+    # Create empty message and error.
     message = None
+    error = None
 
     # Make sure the method was post.
     if request.method == 'POST':
@@ -75,20 +76,12 @@ def add_running():
             # Get the current time.
             now = datetime.utcnow()
 
-            # Get the last post.
-            last_post = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).first()
-
-            # Check to see if there was a last post.
-            if last_post:
-                # If there was set last_post_date to the date on the post.
-                last_post_date = last_post.date
-            else:
-                # Create an empty datetime object with just todays date no time.
-                last_post_date = datetime(now.year,now.month,now.day)
+            # Get the all the last posts within the last minute.
+            last_posts = Exercise.query.filter_by(member=current_user).filter(Exercise.date > (now-timedelta(minutes=1))).all()
 
             # Make sure they aren't cheating by having more than 24 hours in one day.
             # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
-            if (get_exercise_total(now) + float(add_running_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
+            if (get_exercise_total(now) + float(add_running_form.duration.data) <= 24) and len(last_posts) < 5:
                 # Look Up the calories burned and commit it.
                 
                 # Get users most recent weight.
@@ -108,15 +101,15 @@ def add_running():
                 # Make the correct error message.
                 flash("An error occurred adding that exercise.",'error')
                 if (get_exercise_total(now) + float(add_running_form.duration.data) > 24):
-                    message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                    error = "Exercise has not been added as the current total for today exceeds 24 hours."
                 else:
-                    message = "You have tried to add too many events in the last 30 seconds, please wait then try again."
+                    error = "You have tried to add too many events in the last minute, please wait then try again."
 
     # Get the last 4 exercises for running.
     running_data = Exercise.query.filter_by(exercise_type='running',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     # Display the add running page.
-    return render_template('add_running.html', add_running_form=add_running_form, message=message,running_data=running_data)
+    return render_template('add_running.html', add_running_form=add_running_form, message=message,error=error,running_data=running_data)
 
 @exercise_blueprint.route('/add_cycling', methods=['GET','POST'])
 @login_required
@@ -125,8 +118,9 @@ def add_cycling():
     Displays a form for users to add cycling.
     """
 
-    # Create empty message.
+    # Create empty message and error.
     message = None
+    error = None
 
     # Create the cycling form.
     add_cycling_form = AddCyclingForm()
@@ -139,20 +133,12 @@ def add_cycling():
             # Get the current time.
             now = datetime.utcnow()
 
-            # Get the last post.
-            last_post = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).first()
-
-            # Check to see if there was a last post.
-            if last_post:
-                # If there was set last_post_date to the date on the post.
-                last_post_date = last_post.date
-            else:
-                # Create an empty datetime object with just todays date no time.
-                last_post_date = datetime(now.year,now.month,now.day)
+            # Get the all the last posts within the last minute.
+            last_posts = Exercise.query.filter_by(member=current_user).filter(Exercise.date > (now-timedelta(minutes=1))).all()
 
             # Make sure they aren't cheating by having more than 24 hours in one day.
             # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
-            if (get_exercise_total(now) + float(add_cycling_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
+            if (get_exercise_total(now) + float(add_cycling_form.duration.data) <= 24) and len(last_posts) < 5:
                 # Look Up the calories burned and commit it.
                 
                 # Get users most recent weight.
@@ -172,15 +158,15 @@ def add_cycling():
                 # Make the correct error message.
                 flash("An error occurred adding that exercise.",'error')
                 if (get_exercise_total(now) + float(add_cycling_form.duration.data) > 24):
-                    message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                    error = "Exercise has not been added as the current total for today exceeds 24 hours."
                 else:
-                    message = "You have tried to add too many events in the last 30 seconds, please wait then try again."
+                    error = "You have tried to add too many events in the last minute, please wait then try again."
 
     # Get the last 4 exercises for running.
     cycling_data = Exercise.query.filter_by(exercise_type='cycling',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     # Display the add cycling page.
-    return render_template('add_cycling.html', add_cycling_form=add_cycling_form, message=message, cycling_data=cycling_data)
+    return render_template('add_cycling.html', add_cycling_form=add_cycling_form, message=message,error=error, cycling_data=cycling_data)
     
 @exercise_blueprint.route('/add_swimming', methods=['GET','POST'])
 @login_required
@@ -189,8 +175,9 @@ def add_swimming():
     Displays a form for users to add swimming.
     """
 
-    # Create empty message.
-    message=None
+    # Create empty message and error.
+    message = None
+    error = None
 
     # Create the swimming form.
     add_swimming_form = AddSwimmingForm()
@@ -203,20 +190,12 @@ def add_swimming():
             # Get the current time.
             now = datetime.utcnow()
 
-            # Get the last post.
-            last_post = Exercise.query.filter_by(member=current_user).order_by(Exercise.id.desc()).first()
-
-            # Check to see if there was a last post.
-            if last_post:
-                # If there was set last_post_date to the date on the post.
-                last_post_date = last_post.date
-            else:
-                # Create an empty datetime object with just todays date no time.
-                last_post_date = datetime(now.year,now.month,now.day)
+            # Get the all the last posts within the last minute.
+            last_posts = Exercise.query.filter_by(member=current_user).filter(Exercise.date > (now-timedelta(minutes=1))).all()
 
             # Make sure they aren't cheating by having more than 24 hours in one day.
             # And they haven't added a post in the last 30 seconds. i.e. they aren't rapidly clicking the button.
-            if (get_exercise_total(now) + float(add_swimming_form.duration.data) <= 24) and ((last_post_date + timedelta(seconds=30)) < now):
+            if (get_exercise_total(now) + float(add_swimming_form.duration.data) <= 24) and len(last_posts) < 5:
                 # Look Up the calories burned and commit it.
                 
                 # Get users most recent weight.
@@ -236,15 +215,15 @@ def add_swimming():
                 # Make the correct error message.
                 flash("An error occurred adding that exercise.",'error')
                 if (get_exercise_total(now) + float(add_swimming_form.duration.data) > 24):
-                    message = "Exercise has not been added as the current total for today exceeds 24 hours."
+                    error = "Exercise has not been added as the current total for today exceeds 24 hours."
                 else:
-                    message = "You have tried to add too many events in the last 30 seconds, please wait then try again."
+                    error = "You have tried to add too many events in the last minute, please wait then try again."
 
     # Get the last 4 exercises for running.
     swimming_data = Exercise.query.filter_by(exercise_type='swimming',member=current_user).order_by(Exercise.id.desc()).limit(4).all()
 
     # Display the add swimming page.
-    return render_template('add_swimming.html', add_swimming_form=add_swimming_form, message=message, swimming_data=swimming_data)
+    return render_template('add_swimming.html', add_swimming_form=add_swimming_form, message=message,error=error, swimming_data=swimming_data)
 
 @exercise_blueprint.route('/view')
 @login_required

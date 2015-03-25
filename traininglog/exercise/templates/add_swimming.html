@@ -15,8 +15,14 @@
             <h1>Exercise<br/><small>Swimming</small></h1>
         </div>
 
+        <!-- If there is an error display it to the user. -->
+        {% if error %}
+            <p class="alert alert-danger">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                {{ error }}
+            </p>
         <!-- If there is a message display it to the user. -->
-        {% if message %}
+        {% elif message %}
             <p class="alert alert-success">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 {{ message }}
