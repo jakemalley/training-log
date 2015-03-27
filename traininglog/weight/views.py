@@ -28,7 +28,7 @@ def weight_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # Due to some errors with old users not having weight data, make sure the user has added weight data.
-        if not current.weight_data:
+        if not current_user.weight_data:
             # If no data was found, redirect them to the add page.
             return redirect(url_for('weight.add_weight',error="You must add a weight to the database before continuing. Otherwise some applications may not work correctly."))
         return f(*args, **kwargs)
