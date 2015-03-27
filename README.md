@@ -35,6 +35,12 @@ export TRAINING_LOG_CONFIG='config.DevelopmentConfig'
 python manage.py runserver
 ```
 
+Running in production mode.
+```bash
+export TRAINING_LOG_CONFIG='config.ProductionConfig'
+python manage.py runserver
+```
+
 
 # Repository Structure
 
@@ -42,6 +48,8 @@ python manage.py runserver
    - versions                (Stores migration versions.)
 - traininglog                (Training log package.)
    - dashboard               (Dashboard blueprint.)
+      - templates            (Blueprint templates.)
+   - admin                   (Admin blueprint.)
       - templates            (Blueprint templates.)
    - exercise                (Exercise blueprint.)
       - templates            (Blueprint templates.)
