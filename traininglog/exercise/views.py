@@ -16,6 +16,7 @@ from traininglog import db
 from datetime import datetime, date, timedelta
 from querying_functions import *
 from operator import itemgetter
+from traininglog.weight.views import weight_required
 
 # Setup the exercise blueprint.
 exercise_blueprint = Blueprint(
@@ -56,6 +57,7 @@ def index():
 
 @exercise_blueprint.route('/add_running', methods=['GET','POST'])
 @login_required
+@weight_required
 def add_running():
     """
     Displays a form for users to add running.
@@ -113,6 +115,7 @@ def add_running():
 
 @exercise_blueprint.route('/add_cycling', methods=['GET','POST'])
 @login_required
+@weight_required
 def add_cycling():
     """
     Displays a form for users to add cycling.
@@ -170,6 +173,7 @@ def add_cycling():
     
 @exercise_blueprint.route('/add_swimming', methods=['GET','POST'])
 @login_required
+@weight_required
 def add_swimming():
     """
     Displays a form for users to add swimming.
@@ -273,6 +277,7 @@ def view_exercise(exercise_id):
 
 @exercise_blueprint.route('/edit_exercise', methods=['POST','GET'])
 @login_required
+@weight_required
 def edit_exercise():
     """
     Allows users to edit their exercise.

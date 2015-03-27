@@ -14,12 +14,25 @@ from traininglog.models import Weight
 from traininglog import db
 from forms import AddWeightForm
 from datetime import datetime
+from functools import wraps
 
 # Setup the weight blueprint.
 weight_blueprint = Blueprint(
     'weight', __name__,
     template_folder='templates'
     )
+
+# Weight required, a decorator used to make sure users have 
+# added a weight to the database. 
+def weight_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Due to some errors with old users not having weight data, make sure the user has added weight data.
+        if not current.weight_data:
+            # If no data was found, redirect them to the add page.
+            return redirect(url_for('weight.add_weight',error="You must add a weight to the database before continuing. Otherwise some applications may not work correctly."))
+        return f(*args, **kwargs)
+    return decorated_function
 
 # Define the routes.
 @weight_blueprint.route('/')
@@ -55,8 +68,8 @@ def add_weight():
     # Create the form
     add_weight_form = AddWeightForm()
 
-    # Create an empty error.
-    error = None
+    # Create a error variable from the get arguments, otherwise default to none.
+    error = request.args.get('error')
 
     # If the method was post.
     if request.method == 'POST':

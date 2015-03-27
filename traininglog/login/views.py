@@ -58,6 +58,11 @@ def login():
                     member.set_last_login_date(datetime.utcnow())
                     # Commit changes to the database.
                     db.session.commit()
+                    # Due to some errors with old users not having weight data, make sure the user has added weight data.
+                    if not member.weight_data:
+                        # If no data was found, redirect them to the add page.
+                        return redirect(url_for('weight.add_weight',error="You must add a weight to the database before continuing. Otherwise some applications may not work correctly."))
+
                     # If the user was trying to access a page before he was redirected here
                     # redirect them back to that page.
                     if request.args.get('next') and not request.args.get('next') == "/logout":
