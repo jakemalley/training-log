@@ -40,7 +40,10 @@ Running in production mode.
 export TRAINING_LOG_CONFIG='config.ProductionConfig'
 python manage.py runserver
 ```
-
+Or alternatively use Tornado Server rather than Flask's development server.
+```bash
+python manage.py tornadoserver
+```
 
 # Repository Structure
 
