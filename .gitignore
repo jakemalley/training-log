@@ -38,3 +38,7 @@
 ehthumbs.db
 Thumbs.db
 *.swp
+
+# Old Files #
+#############
+*.old
